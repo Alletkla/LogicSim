@@ -8,7 +8,7 @@ export class BoolNodeFactory extends AbstractReactFactory<BoolNodeModel, Diagram
     }
 
     generateReactWidget(event: GenerateWidgetEvent<BoolNodeModel>): JSX.Element {
-        return <BoolNodeWidget engine={this.engine} size={50} node={event.model} />
+        return <BoolNodeWidget engine={this.engine} node={event.model} />
     }
     generateModel(event: GenerateModelEvent): BoolNodeModel {
         return new BoolNodeModel()

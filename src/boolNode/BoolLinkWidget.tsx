@@ -23,7 +23,7 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 		this.refPaths = [];
 		this.state = {
 			selected: false,
-            active: props.link.getSourcePort().isActive()
+            active: props.link.getOptions().active
 		};
 	}
 
@@ -37,6 +37,7 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 				return ref.current!;
 			})
 		);
+		this.props.diagramEngine.repaintCanvas()
 	}
 
 	componentDidMount(): void {
@@ -45,6 +46,12 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 				return ref.current!;
 			})
 		);
+
+		this.props.link.getSourcePort().registerListener(
+			{activeStateChanged: (event) => {
+				this.setState(prev => ({...prev, active: event.isActive}))
+			}}
+		)
 	}
 
 	componentWillUnmount(): void {

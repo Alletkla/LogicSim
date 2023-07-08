@@ -24,7 +24,7 @@ engine.getLinkFactories().registerFactory(new BoolLinkFactory())
 var model = new DiagramModel();
 
 //3-A) create a default node
-var node1 = new DefaultNodeModel({
+var node1 = new BoolNodeModel({
   name: 'Node 1',
   color: 'rgb(0,192,255)'
 });
@@ -32,18 +32,19 @@ node1.setPosition(100, 100);
 let port1 = node1.addOutPort('Out');
 
 //3-B) create another default node
-var node2 = new DefaultNodeModel('Node 2', 'rgb(192,255,0)');
+var node2 = new BoolNodeModel('Node 2', 'rgb(192,255,0)');
 let port2 = node2.addInPort('In');
 node2.setPosition(400, 100);
 
-var node3 = new BoolNodeModel();
+var node3 = new BoolNodeModel('Node 3', 'rgb(192,255,0)');
 node3.setPosition(200, 150)
 let port3 = node3.addOutPort('Out')
+let port4 = node3.addInPort('In')
 
 // link the ports
 let link1 = port3.link<BoolLinkModel>(port2);
 link1.getOptions().testName = 'Test';
-link1.addLabel('Hello World!');
+// link1.addLabel('Hello World!');
 
 
 

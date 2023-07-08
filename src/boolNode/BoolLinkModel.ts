@@ -8,7 +8,10 @@ export interface BoolLinkModelOptions extends DefaultLinkModelOptions {
 }
 
 export interface BoolLinkModelListener extends BaseListener {
-    portActiveStateChanged?(event: BaseEvent & {
+    linkConnected?(event: BaseEvent & {
+        isActive: boolean;
+    }): void;
+	activeStateChanged?(event: BaseEvent & {
         isActive: boolean;
     }): void;
 }
@@ -21,9 +24,6 @@ export interface BoolLinkModelGenerics extends LinkModelGenerics {
 
 
 export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
-    activatedColor: string
-    active: boolean
-
 	constructor(options: BoolLinkModelOptions = {}) {
 		super({
 			type: 'bool',
@@ -33,13 +33,16 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 			curvyness: 50,
 			...options
 		});
-        this.activatedColor = options.activatedColor || 'rgb(0,255,0)',
-        console.log("Source POrt", this.getSourcePort()?.isActive())
-        this.active = options.active || this.getSourcePort()?.isActive() || false,
+        this.options.activatedColor = options.activatedColor || 'rgb(0,255,0)',
+        this.options.active = options.active || this.getSourcePort()?.isActive() || false
         this.registerListener({
-            portActiveStateChanged: (event) => {
-                console.log("in Link", event)
-                this.active = event.isActive
+            linkConnected: (event) => {
+                this.options.active = event.isActive
+        }
+        })
+		this.registerListener({
+            activeStateChanged: (event) => {
+                this.options.active = event.isActive
         }
         })
 	}
@@ -110,14 +113,6 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 		this.options.color = color;
 		this.fireEvent({ color }, 'colorChanged');
 	}
-
-    isActive(){
-        return this.active
-    }
-
-    setActive(active: boolean){
-        this.active = active;
-    }
 
     getSourcePort(): BoolPortModel | null {
         return super.getSourcePort() as BoolPortModel

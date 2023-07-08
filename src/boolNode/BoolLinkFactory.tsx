@@ -32,7 +32,7 @@ export class BoolLinkFactory extends DefaultLinkFactory {
 	}
 
 	generateReactWidget(event: any) {
-        return <BoolLinkWidget link={event.model} diagramEngine={this.engine} active={event.model.isActive()}/>
+        return <BoolLinkWidget link={event.model} diagramEngine={this.engine} active={event.model.getOptions().active}/>
     }
 
 	generateModel(): BoolLinkModel {
@@ -41,7 +41,6 @@ export class BoolLinkFactory extends DefaultLinkFactory {
 
 	generateLinkSegment(model: BoolLinkModel, selected: boolean, path: string) {
 		let color = model.getOptions().active ? model.getOptions().activatedColor : model.getOptions().color
-		console.log("model", model, "active:", model.active, color)
 		return (
 			<S.Path
 				selected={selected}
