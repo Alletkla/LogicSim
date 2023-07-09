@@ -1,13 +1,10 @@
 import {
   DefaultPortLabel,
   DiagramEngine,
-  PortModel,
-  PortModelAlignment,
-  PortWidget,
 } from "@projectstorm/react-diagrams";
 import { ChangeEvent, Component } from "react";
 import { BoolNodeModel } from "./BoolNodeModel";
-import { BoolPortModel } from "./BoolPortModel";
+import { BoolPortModel } from "../boolPort/BoolPortModel";
 import styled from '@emotion/styled';
 import * as _ from 'lodash'
 
@@ -72,24 +69,10 @@ export class BoolNodeWidget extends Component<BoolNodeWidgetProps> {
     }
 
     port.setActive(event.currentTarget.checked)
-    this.props.engine.repaintCanvas()
-    this.props.engine.getModel().getActiveLinkLayer().getLinks()
   }
 
   generatePort = (port) => {
-		return (<>
-    <DefaultPortLabel engine={this.props.engine} port={port} key={port.getID()} />
-    <input
-          onChange={(e) =>
-            this.handleChange(
-              e,
-              port
-            )
-          }
-          type={"checkbox"}
-        ></input>
-    </>
-    );
+		return (<DefaultPortLabel engine={this.props.engine} port={port} key={port.getID()} />);
 	};
 
 	render() {

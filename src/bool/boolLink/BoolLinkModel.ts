@@ -1,24 +1,21 @@
-import { BaseEvent, BaseListener, DefaultLabelModel, DefaultLinkModel, DefaultLinkModelOptions, DeserializeEvent, LabelModel, LinkModel, LinkModelGenerics, PortModel, PortModelAlignment, PortModelGenerics } from "@projectstorm/react-diagrams";
+import { BaseEvent, DefaultLabelModel, DefaultLinkModelListener, DefaultLinkModelOptions, DeserializeEvent, LabelModel, LinkModel, LinkModelGenerics, ListenerHandle, PortModel, PortModelAlignment } from "@projectstorm/react-diagrams";
 import { BezierCurve } from '@projectstorm/geometry';
-import { BoolPortModel } from "./BoolPortModel";
+import { BoolPortModel } from "../boolPort/BoolPortModel";
 
 export interface BoolLinkModelOptions extends DefaultLinkModelOptions {
     activatedColor?: string;
     active?: boolean;
 }
 
-export interface BoolLinkModelListener extends BaseListener {
-    linkConnected?(event: BaseEvent & {
-        isActive: boolean;
-    }): void;
-	activeStateChanged?(event: BaseEvent & {
+export interface BoolLinkModelListener extends DefaultLinkModelListener {
+	activeChanged?(event: BaseEvent & {
         isActive: boolean;
     }): void;
 }
 
 
 export interface BoolLinkModelGenerics extends LinkModelGenerics {
-	LISTENER: BoolLinkModelListener;
+	LISTENER: DefaultLinkModelListener;
 	OPTIONS: BoolLinkModelOptions;
 }
 
@@ -35,16 +32,6 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 		});
         this.options.activatedColor = options.activatedColor || 'rgb(0,255,0)',
         this.options.active = options.active || this.getSourcePort()?.isActive() || false
-        this.registerListener({
-            linkConnected: (event) => {
-                this.options.active = event.isActive
-        }
-        })
-		this.registerListener({
-            activeStateChanged: (event) => {
-                this.options.active = event.isActive
-        }
-        })
 	}
 
 	calculateControlOffset(port: PortModel): [number, number] {
@@ -114,8 +101,21 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 		this.fireEvent({ color }, 'colorChanged');
 	}
 
+	setActive(active: boolean) {
+		this.options.active = active
+		this.fireEvent({ isActive: active }, 'activeChanged')
+	}
+
     getSourcePort(): BoolPortModel | null {
         return super.getSourcePort() as BoolPortModel
     }
+
+	getTargetPort(): BoolPortModel | null {
+        return super.getTargetPort() as BoolPortModel
+    }
+
+	registerListener(listener: BoolLinkModelListener): ListenerHandle {
+		return super.registerListener(listener)
+	}
 }
 

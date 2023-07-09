@@ -3,16 +3,16 @@ import React, { MouseEvent } from "react";
 import { BoolLinkModel } from "./BoolLinkModel";
 
 export interface BoolLinkProps {
-    link: BoolLinkModel;
-    diagramEngine: DiagramEngine;
-    pointAdded?: (point: PointModel, event: MouseEvent) => any;
-    renderPoints?: boolean;
-    selected?: (event: MouseEvent) => any;
+	link: BoolLinkModel;
+	diagramEngine: DiagramEngine;
+	pointAdded?: (point: PointModel, event: MouseEvent) => any;
+	renderPoints?: boolean;
+	selected?: (event: MouseEvent) => any;
 	active: boolean
 }
 export interface BoolLinkState {
-    selected: boolean;
-    active: boolean;
+	selected: boolean;
+	active: boolean;
 }
 
 export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState> {
@@ -23,7 +23,7 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 		this.refPaths = [];
 		this.state = {
 			selected: false,
-            active: props.link.getOptions().active
+			active: props.link.getOptions().active
 		};
 	}
 
@@ -47,11 +47,22 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 			})
 		);
 
-		this.props.link.getSourcePort().registerListener(
-			{activeStateChanged: (event) => {
-				this.setState(prev => ({...prev, active: event.isActive}))
-			}}
-		)
+		const listener = {
+			activeChanged: (event) => {
+				this.setState(prev => ({ ...prev, active: event.isActive }))
+			}
+		}
+
+		//Only listen to SourcePortChanges since they change the active state of the link
+		const sourcePort = this.props.link.getSourcePort()
+		if (sourcePort){
+			sourcePort.registerListener(listener)
+		}else{
+			this.props.link.registerListener({
+				'sourcePortChanged': (event) => event.port.registerListener(listener)
+			})
+		}
+
 	}
 
 	componentWillUnmount(): void {
