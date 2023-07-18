@@ -3,9 +3,10 @@ import { DiagramEngine, PortWidget } from '@projectstorm/react-diagrams-core';
 import styled from '@emotion/styled';
 import { BoolPortModel } from './BoolPortModel';
 
-export interface BoolPortLabelWidgetProps {
-	port: BoolPortModel;
-	engine: DiagramEngine;
+interface BoolPortLabelWidgetProps extends React.PropsWithChildren<any> {
+	port: BoolPortModel,
+	engine: DiagramEngine,
+	manual?: boolean,
 }
 
 namespace S {
@@ -31,44 +32,96 @@ namespace S {
 	`;
 }
 
-export class BoolPortLabelWidget extends React.Component<BoolPortLabelWidgetProps> {
-	handleChange(
+export default function BoolPortLabelWidget({
+	port,
+	engine,
+	manual = false
+}: BoolPortLabelWidgetProps) {
+
+	function handleChange(
 		event: React.ChangeEvent<HTMLInputElement>,
 		port: BoolPortModel | null
 	) {
 		if (!port) {
 			return;
 		}
-
 		port.setActive(event.currentTarget.checked)
 	}
 
-	render() {
-		const port = (
-			<PortWidget engine={this.props.engine} port={this.props.port}>
-				<S.Port />
-			</PortWidget>
-		);
-		const label = <S.Label>{this.props.port.getOptions().label}</S.Label>;
+	const portWidget = (
+		<PortWidget engine={engine} port={port}>
+			<S.Port />
+		</PortWidget>
+	);
+	const label = <S.Label>{port.getOptions().label}</S.Label>;
 
-		const checkbox =
-			(<input
-				onChange={(e) =>
-					this.handleChange(
-						e,
-						this.props.port
-					)
-				}
-				type={"checkbox"}
-			>
-			</input>)
+	const checkbox =
+		(<input
+			onChange={(e) =>
+				handleChange(
+					e,
+					port
+				)
+			}
+			type={"checkbox"}
+		>
+		</input>)
 
-		return (
-			<S.PortLabel>
-				{this.props.port.getOptions().in ? "" : checkbox}
-				{this.props.port.getOptions().in ? port : label}
-				{this.props.port.getOptions().in ? label : port}
-			</S.PortLabel>
-		);
-	}
+	return (
+		<S.PortLabel>
+			{manual && checkbox}
+			{port.getOptions().in ? portWidget : label}
+			{port.getOptions().in ? label : portWidget}
+		</S.PortLabel>
+	);
 }
+
+
+// export class BoolPortLabelWidget extends React.Component<BoolPortLabelWidgetProps> {
+
+// 	constructor(props: BoolPortLabelWidgetProps){
+// 		const testObj = Object.assign({manual: false}, props)
+// 		console.log(testObj)
+// 		super(testObj)
+// 	}
+
+// 	handleChange(
+// 		event: React.ChangeEvent<HTMLInputElement>,
+// 		port: BoolPortModel | null
+// 	) {
+// 		if (!port) {
+// 			return;
+// 		}
+
+// 		port.setActive(event.currentTarget.checked)
+// 	}
+
+// 	render() {
+// 		const port = (
+// 			<PortWidget engine={this.props.engine} port={this.props.port}>
+// 				<S.Port />
+// 			</PortWidget>
+// 		);
+// 		const label = <S.Label>{this.props.port.getOptions().label}</S.Label>;
+
+// 		const checkbox =
+// 			(<input
+// 				onChange={(e) =>
+// 					this.handleChange(
+// 						e,
+// 						this.props.port
+// 					)
+// 				}
+// 				type={"checkbox"}
+// 			>
+// 			</input>)
+
+// 		return (
+// 			<S.PortLabel>
+// 				{this.props.manual && checkbox}
+// 				{this.props.port.getOptions().in ? port : label}
+// 				{this.props.port.getOptions().in ? label : port}
+// 			</S.PortLabel>
+// 		);
+// 	}
+// }

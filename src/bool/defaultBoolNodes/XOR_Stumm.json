@@ -283,12 +283,12 @@
                             "type": "bool",
                             "x": 100,
                             "y": 100,
-                            "name": "In1",
+                            "name": "In",
                             "alignment": "left",
                             "parentNode": "12f7479c-4d2e-4851-9b39-b00a01b3c2f4",
                             "links": [],
                             "in": true,
-                            "label": "In1"
+                            "label": "In"
                         },
                         {
                             "id": "ff42df5f-a635-4a84-a768-54392ed91096",
@@ -327,12 +327,12 @@
                             "type": "bool",
                             "x": 100,
                             "y": 200,
-                            "name": "In2",
+                            "name": "In",
                             "alignment": "left",
                             "parentNode": "f2e56e90-58dd-4a2e-a6f9-48512e19b642",
                             "links": [],
                             "in": true,
-                            "label": "In2"
+                            "label": "In"
                         },
                         {
                             "id": "6b90ea66-1909-4561-8acd-5b790e394ab0",
@@ -396,7 +396,7 @@
                             "label": "Out"
                         }
                     ],
-                    "name": "NOT",
+                    "name": "?",
                     "color": "rgb(192,255,0)",
                     "portsInOrder": [
                         "d657c175-7e5e-497c-bdbc-8322ab794413"
@@ -442,7 +442,7 @@
                             "label": "Out"
                         }
                     ],
-                    "name": "NOT",
+                    "name": "?",
                     "color": "rgb(192,255,0)",
                     "portsInOrder": [
                         "37c4eaef-0e82-417d-a48c-63d540762086"
@@ -502,7 +502,7 @@
                             "label": "Out"
                         }
                     ],
-                    "name": "AND",
+                    "name": "?",
                     "color": "rgb(192,255,0)",
                     "portsInOrder": [
                         "e813ff1f-b931-4bdc-bd9f-4b07aac2cc5f",
@@ -563,7 +563,7 @@
                             "label": "Out"
                         }
                     ],
-                    "name": "AND",
+                    "name": "?",
                     "color": "rgb(192,255,0)",
                     "portsInOrder": [
                         "cc606145-5e6c-4d54-8986-b9e3f49b5d54",
@@ -624,7 +624,7 @@
                             "label": "Out"
                         }
                     ],
-                    "name": "OR",
+                    "name": "?",
                     "color": "rgb(192,255,0)",
                     "portsInOrder": [
                         "adf9f22f-51d0-4fb4-b9bd-9f67f37d4304",

@@ -1,73 +1,39 @@
-import { DefaultNodeModel, DefaultNodeModelOptions, PortModelAlignment } from "@projectstorm/react-diagrams";
+import { BoolNodeModel, BoolNodeModelActivFuncs, BoolNodeModelOptions } from "../boolNode/BoolNodeModel";
 import { BoolPortModel } from "../boolPort/BoolPortModel";
 
-export interface BoolNodeModelGenerics {
-    PORT: BoolPortModel;
+export interface BoolSourceModelOptions {
+    name?: string;
+    color?: string;
 }
+export class BoolSourceNodeModel extends BoolNodeModel {
 
-export interface BoolNodeModelOptions extends DefaultNodeModelOptions {
-    activationFun?: (inputPorts: BoolPortModel[]) => boolean
-}
-
-export class BoolSourceNodeModel extends DefaultNodeModel {
-
-    constructor(name: string, color: string, activationFun: (inputPorts: BoolPortModel[]) => boolean);
-    constructor(options?: BoolNodeModelOptions);
-    constructor(options: any = {}, color?: string, activationFun?: (inputPorts: BoolPortModel[]) => boolean) {
-        if (typeof options === 'string') {
+    constructor(name: string, color: string);
+    constructor(options?: BoolSourceModelOptions);
+    constructor(nameOrOptions: string | BoolSourceModelOptions, color?: string) {
+        let options: BoolSourceModelOptions = {};
+        if (typeof nameOrOptions === 'string') {
             options = {
-                name: options,
+                name: nameOrOptions,
                 color: color,
-                activationFun: activationFun
             };
+        }else {
+            options = <BoolSourceModelOptions>nameOrOptions
         }
-        super(Object.assign({ type: 'boolSource', name: 'Untitled', color: 'rgb(0,192,255)', activationFun: () => true }, options));
+        super({
+            type: 'boolSource',
+            name: "Untitled",
+            color: "rgb(0,192,255)",
+            activationFun: (portsIn: BoolPortModel[]) => portsIn[0]?.active || false,
+            ...options
+        })
+        this.addInPort('In')
+        this.addOutPort('Out')
     }
-
-    getOptions(): BoolNodeModelOptions {
-        return super.getOptions()
-    }
-
 
     addInPort(label, after = true) {
-        const p = new BoolPortModel({
-            in: true,
-            name: label,
-            label: label,
-            alignment: PortModelAlignment.LEFT
-        });
-        p.registerListener({
-            'activeChanged': () => {
-                this.getOutPorts().forEach(port => port.setActive(this.getOptions().activationFun(this.getInPorts())))
-            }
-        })
-        if (!after) {
-            this.portsIn.splice(0, 0, p);
+        if (this.getInPorts().length >= 1) {
+            throw new Error("An BoolSourceNode can't have more than 1 input port, since the only Input is meant for programmatically forwarding signals e.g. from wrappers")
         }
-        return this.addPort(p);
-    }
-    addOutPort(label, after = true) {
-        const p = new BoolPortModel({
-            in: false,
-            name: label,
-            label: label,
-            alignment: PortModelAlignment.RIGHT
-        });
-        if (!after) {
-            this.portsOut.splice(0, 0, p);
-        }
-        return this.addPort(p);
-    }
-
-    getPort(name: string): BoolPortModel | null {
-        return super.getPort(name) as BoolPortModel
-    }
-
-    getOutPorts(): BoolPortModel[] {
-        return super.getOutPorts() as BoolPortModel[]
-    }
-
-    getInPorts(): BoolPortModel[] {
-        return super.getInPorts() as BoolPortModel[]
+        return super.addInPort(label, after)
     }
 }

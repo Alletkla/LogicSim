@@ -1,36 +1,39 @@
-import { BasePositionModelOptions, NodeModel, NodeModelGenerics, PortModelAlignment } from "@projectstorm/react-diagrams";
+import { BasePositionModelOptions, ListenerHandle, NodeModel, NodeModelGenerics, PortModelAlignment } from "@projectstorm/react-diagrams";
 import { BoolPortModel } from "../boolPort/BoolPortModel";
 import * as _ from 'lodash'
 
 export interface BoolNodeModelOptions extends BasePositionModelOptions {
     name?: string;
     color?: string;
-    activationFun?: BoolNodeModelActivFuncs
+    activationFun?: (portsIn: BoolPortModel[]) => boolean
 }
 export interface BoolNodeModelGenerics extends NodeModelGenerics {
     OPTIONS: BoolNodeModelOptions;
+    PORT: BoolPortModel;
 }
 
 export enum BoolNodeModelActivFuncs {
-    DEFAULT = 'default',
     AND = 'and',
     OR = 'or',
     NOT = 'not',
 }
 
-export class BoolNodeModel extends NodeModel<BoolNodeModelGenerics> {  
+export class BoolNodeModel extends NodeModel<BoolNodeModelGenerics> {
     protected portsIn: BoolPortModel[];
     protected portsOut: BoolPortModel[];
+    /**
+     * @TODO : make it an object, with the id of the added port as key....
+     */
+    protected inPortListenerHandle: ListenerHandle;
 
     static activationFuns = {
-        [BoolNodeModelActivFuncs.DEFAULT] : (portsIn: BoolPortModel[]) => true,
-        [BoolNodeModelActivFuncs.AND] : (portsIn: BoolPortModel[]) => portsIn.every(el => el.active === true),
-        [BoolNodeModelActivFuncs.OR] : (portsIn: BoolPortModel[]) => !!portsIn.find((val) => val.active === true),
-        [BoolNodeModelActivFuncs.NOT] : (portsIn: BoolPortModel[]) => !portsIn[0].active
+        [BoolNodeModelActivFuncs.AND]: (portsIn: BoolPortModel[]) => portsIn.every(el => el.active === true),
+        [BoolNodeModelActivFuncs.OR]: (portsIn: BoolPortModel[]) => !!portsIn.find((val) => val.active === true),
+        [BoolNodeModelActivFuncs.NOT]: (portsIn: BoolPortModel[]) => !portsIn[0].active
     }
-    constructor(name: string, color: string, activationFun: BoolNodeModelActivFuncs);
+    constructor(name: string, color: string, activationFun: (portsIn: BoolPortModel[]) => boolean);
     constructor(options?: BoolNodeModelOptions);
-    constructor(options: any = {}, color?: string, activationFun?: BoolNodeModelActivFuncs) {
+    constructor(options: any = {}, color?: string, activationFun?: (portsIn: BoolPortModel[]) => boolean) {
         if (typeof options === 'string') {
             options = {
                 name: options,
@@ -38,7 +41,9 @@ export class BoolNodeModel extends NodeModel<BoolNodeModelGenerics> {
                 activationFun: activationFun
             };
         }
-        super(Object.assign({ type: 'bool', name: 'Untitled', color: 'rgb(0,192,255)', activationFun:BoolNodeModelActivFuncs.DEFAULT }, options));
+        super(Object.assign(
+            <BoolNodeModelOptions>{ type: 'bool', name: 'Untitled', color: 'rgb(0,192,255)', activationFun: () => false },
+            options));
         this.portsOut = [];
         this.portsIn = [];
     }
@@ -49,9 +54,10 @@ export class BoolNodeModel extends NodeModel<BoolNodeModelGenerics> {
         super.doClone(lookupTable, clone);
     }
 
-    removePort(port) {
+    removePort(port: BoolPortModel) {
         super.removePort(port);
         if (port.getOptions().in) {
+            port.deregisterListener(this.inPortListenerHandle)
             this.portsIn.splice(this.portsIn.indexOf(port), 1);
         }
         else {
@@ -59,22 +65,20 @@ export class BoolNodeModel extends NodeModel<BoolNodeModelGenerics> {
         }
     }
 
-
     getOptions(): BoolNodeModelOptions {
         return super.getOptions()
     }
 
     getActivationFun(): (portsIn: BoolPortModel[]) => boolean {
-        return BoolNodeModel.activationFuns[this.getOptions().activationFun]
+        return this.getOptions().activationFun
     }
 
-    addPort(port) {
+    addPort(port: BoolPortModel) {
         super.addPort(port);
         if (port.getOptions().in) {
-            port.registerListener({
+            this.inPortListenerHandle = port.registerListener({
                 'activeChanged': () => {
                     this.getOutPorts().forEach(port => port.setActive(this.getActivationFun()(this.getInPorts())))
-                    // this.getOutPorts().forEach(port => console.log(this.getActivationFun()))
                 }
             })
             if (this.portsIn.indexOf(port) === -1) {
@@ -110,7 +114,7 @@ export class BoolNodeModel extends NodeModel<BoolNodeModelGenerics> {
             label: label,
             alignment: PortModelAlignment.RIGHT
         });
-        
+
         if (!after) {
             this.portsOut.splice(0, 0, p);
         }
@@ -129,18 +133,44 @@ export class BoolNodeModel extends NodeModel<BoolNodeModelGenerics> {
         return this.portsIn;
     }
 
+    setInPorts(ports: BoolPortModel[]) {
+        this.portsIn = []
+        console.log(ports)
+        ports.forEach(port => this.addInPort(port))
+    }
+
+    setOutPorts(ports: BoolPortModel[]) {
+        this.portsOut = []
+        ports.forEach(port => this.addOutPort(port))
+    }
+
     deserialize(event) {
         //activationFun must be added first, cause its needed to activate the right Outputs while adding Ports
-        this.options.activationFun = event.data.activationFun;
+        //We are using indirect eval https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval?retiredLocale=de#never_use_eval!
+        const desFunc = eval?.(event.data.activationFun);
+        this.options.activationFun = desFunc
         super.deserialize(event);
         this.options.name = event.data.name;
         this.options.color = event.data.color;
+        //the ports are added properly via .addPrt() in the super.deserialize()
+        //but the order is not preserved there, thats why this just sets directly
+        this.portsIn = _.map(event.data.portsInOrder, (id) => {
+            return this.getPortFromID(id);
+        });
+        this.portsOut = _.map(event.data.portsOutOrder, (id) => {
+            return this.getPortFromID(id);
+        });
     }
     serialize() {
-        return Object.assign(Object.assign({}, super.serialize()), { name: this.options.name, color: this.options.color, portsInOrder: _.map(this.portsIn, (port) => {
-            return port.getID();
-        }), portsOutOrder: _.map(this.portsOut, (port) => {
-            return port.getID();
-        }), activationFun: this.options.activationFun });
+        return Object.assign(Object.assign({}, super.serialize()), {
+            name: this.options.name,
+            color: this.options.color,
+            portsInOrder: _.map(this.portsIn, (port) => {
+                return port.getID();
+            }),
+            portsOutOrder: _.map(this.portsOut, (port) => {
+                return port.getID();
+            }), activationFun: this.options.activationFun.toString()
+        });
     }
 }

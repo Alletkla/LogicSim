@@ -1,6 +1,6 @@
 import { AbstractReactFactory, DiagramEngine, GenerateModelEvent, GenerateWidgetEvent } from "@projectstorm/react-diagrams";
 import { BoolNodeModel } from "./BoolNodeModel";
-import { BoolNodeWidget } from "./BoolNodeWidget";
+import BoolNodeWidget from "./BoolNodeWidget";
 
 export class BoolNodeFactory extends AbstractReactFactory<BoolNodeModel, DiagramEngine>{
     constructor() {

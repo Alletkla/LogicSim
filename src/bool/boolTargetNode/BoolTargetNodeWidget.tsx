@@ -3,11 +3,11 @@ import {
 	DiagramEngine,
 } from "@projectstorm/react-diagrams";
 import { ChangeEvent, Component } from "react";
-import { BoolNodeModel } from "./BoolNodeModel";
-import { BoolPortModel } from "../boolPort/BoolPortModel";
 import styled from '@emotion/styled';
 import * as _ from 'lodash'
+import { BoolTargetNodeModel } from "./BoolTargetNodeModel";
 import BoolPortLabelWidget from "../boolPort/BoolPortLabelWidget";
+import BoolNodeWidget from "../boolNode/BoolNodeWidget";
 
 namespace S {
 	export const Node = styled.div<{ background: string; selected: boolean }>`
@@ -51,36 +51,26 @@ namespace S {
 			margin-right: 0px;
 		}
 	`;
+
+	export const PortContainer = styled.div`
+		display: flex;
+	`
 }
 
-export interface BoolNodeWidgetProps extends React.PropsWithChildren<any> {
-	node: BoolNodeModel;
+export interface BoolTargetNodeWidgetProps {
+	node: BoolTargetNodeModel;
 	engine: DiagramEngine;
-	renderIns?: boolean;
-	renderOuts?: boolean;
-	manualActivate?: boolean;
+	size?: number;
 }
 
-export default function BoolNodeWidget(props: BoolNodeWidgetProps) {
-	const { node, engine, renderIns = true, renderOuts = true, manualActivate = false } = props
+export interface BoolTargetNodeWidgetProps {
+	node: BoolTargetNodeModel;
+	engine: DiagramEngine;
+}
 
-	function generatePort(port) {
-		return (<BoolPortLabelWidget engine={engine} port={port} key={port.getID()} manual={manualActivate} />);
-	}
+export default function BoolTargetNodeWidget(props: BoolTargetNodeWidgetProps) {
+	const { node, engine } = props
+	const renderIns = true, renderOuts = false, manualActivate = false
 
-	return (
-		<S.Node
-			data-default-node-name={node.getOptions().name}
-			selected={node.isSelected()}
-			background={node.getOptions().color}
-		>
-			<S.Title>
-				<S.TitleName>{node.getOptions().name}</S.TitleName>
-			</S.Title>
-			<S.Ports>
-				<S.PortsContainer>{renderIns && _.map(node.getInPorts(), generatePort)}</S.PortsContainer>
-				<S.PortsContainer>{renderOuts && _.map(node.getOutPorts(), generatePort)}</S.PortsContainer>
-			</S.Ports>
-		</S.Node>
-	);
+	return (<BoolNodeWidget node={node} engine={engine} renderIns={renderIns} renderOuts={renderOuts} manualActivate={manualActivate} > </BoolNodeWidget>)
 }
