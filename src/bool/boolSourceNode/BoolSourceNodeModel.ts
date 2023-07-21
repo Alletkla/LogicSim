@@ -1,9 +1,7 @@
-import { BoolNodeModel, BoolNodeModelActivFuncs, BoolNodeModelOptions } from "../boolNode/BoolNodeModel";
+import { BoolNodeModel, BoolNodeModelOptions } from "../boolNode/BoolNodeModel";
 import { BoolPortModel } from "../boolPort/BoolPortModel";
 
-export interface BoolSourceModelOptions {
-    name?: string;
-    color?: string;
+export interface BoolSourceModelOptions extends BoolNodeModelOptions {
 }
 export class BoolSourceNodeModel extends BoolNodeModel {
 

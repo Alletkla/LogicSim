@@ -53,10 +53,11 @@ interface Serialize {
 }
 
 function App() {
-  const [engine, setEngine] = useState(createEngine())
+  const [engine, ] = useState(createEngine())
+  const [file, setFile] = useState<File>()
   const [model, setModel] = useState(new DiagramModel())
-  const [isWrapper, setIsWrapper] = useState(true)
-  const [loadDefault, ] = useState(true)
+  const [isWrapper, setIsWrapper] = useState(false)
+  const [loadDefault,] = useState(true)
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
@@ -67,10 +68,9 @@ function App() {
     engine.getLinkFactories().registerFactory(new BoolLinkFactory())
     engine.getPortFactories().registerFactory(new BoolPortModelFactory())
 
-    if (loadDefault){
+    if (loadDefault) {
       model.deserializeModel(XOR as unknown as Serialize, engine)
     }
-
     if (isWrapper) {
       var outerModel = new DiagramModel()
       /**
@@ -135,17 +135,18 @@ function App() {
   }
 
   engine.setModel(model);
-  console.log(engine.getModel(), engine.getModel().getNodes())
+  // console.log(engine.getModel(), engine.getModel().getNodes())
 
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleClick(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     const fileReader = new FileReader()
-    fileReader.readAsText(e.target.files[0], 'UTF-8')
+    fileReader.readAsText(file)
     fileReader.onload = event => {
       const newModel = new DiagramModel()
       newModel.deserializeModel(JSON.parse(event.target.result.toString()), engine)
+      console.log(isWrapper)
       if (isWrapper) {
         var outerModel = new DiagramModel()
-        outerModel.addNode(new WrapperNodeModel(e.target.files[0].name.split('.')[0], 'rgb(0,100,100)', newModel))
+        outerModel.addNode(new WrapperNodeModel(file.name.split('.')[0], 'rgb(0,100,100)', newModel))
         setModel(outerModel)
       } else {
         setModel(newModel)
@@ -191,10 +192,22 @@ function App() {
 
   return (
     <>
-      <div className="d-flex justify-content-around">
-        <input type="file" onChange={handleChange} />
-        <button onClick={handleSerialize}>serialize</button>
-        <button onClick={cloneSelected}>Clone Selected</button>
+      <div className="d-flex justify-content-around mb-2 mt-2 flex-wrap">
+        <div className="d-flex justify-content-start align-items-center">
+          <div className="me-2 w-50">
+            {/* <label htmlFor="formFileSm" className="form-label">Load File:</label> */}
+            <input className="form-control form-control-sm" id="formFileSm" type="file" onChange={e => setFile(e.target.files[0])}/>
+          </div>
+          <div className="form-check me-2">
+            <input className="form-check-input" type="checkbox" value="" onChange={e => setIsWrapper(e.target.checked)} id="flexCheckDefault" />
+            <label className="form-check-label" htmlFor="flexCheckDefault">
+              Load wrapped
+            </label>
+          </div>
+          <button className="btn btn-primary" onClick={handleClick}>load element</button>
+        </div>
+        <button className='btn btn-secondary ms-auto me-2' onClick={handleSerialize}>serialize</button>
+        <button className='btn btn-secondary' onClick={cloneSelected}>Clone Selected</button>
       </div>
       <CanvasWidget className="diagram-container" engine={engine} />
     </>

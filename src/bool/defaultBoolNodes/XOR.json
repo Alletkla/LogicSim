@@ -283,12 +283,12 @@
                             "type": "bool",
                             "x": 100,
                             "y": 100,
-                            "name": "In1",
+                            "name": "In0",
                             "alignment": "left",
                             "parentNode": "12f7479c-4d2e-4851-9b39-b00a01b3c2f4",
                             "links": [],
                             "in": true,
-                            "label": "In1"
+                            "label": "In0"
                         },
                         {
                             "id": "ff42df5f-a635-4a84-a768-54392ed91096",
@@ -327,12 +327,12 @@
                             "type": "bool",
                             "x": 100,
                             "y": 200,
-                            "name": "In2",
+                            "name": "In1",
                             "alignment": "left",
                             "parentNode": "f2e56e90-58dd-4a2e-a6f9-48512e19b642",
                             "links": [],
                             "in": true,
-                            "label": "In2"
+                            "label": "In1"
                         },
                         {
                             "id": "6b90ea66-1909-4561-8acd-5b790e394ab0",
