@@ -43,22 +43,21 @@ export class BoolPortModel extends DefaultPortModel {
             this.active = link.getOptions().active
             link.registerListener({
                 'targetPortChanged': (event) => {
-                    if (event.port === this) {
-                        /**
-                         * @TODO deregister old Listener. Where to safe the handle?
-                         */
-                        // link.deregisterListener(listener)
-                        link.registerListener({
-                            'activeChanged': (event) => {
-                                event.isActive !== this.active && this.setActive(event.isActive)
-                            }
-                        })
-                    }
+                    /**
+                     * @TODO deregister old Listener. Where to safe the handle?
+                     */
+                    // link.deregisterListener(listener)
+                    link.registerListener({
+                        'activeChanged': (event) => {
+                            event.isActive !== this.active && this.setActive(event.isActive)
+                        }
+                    })
                 }
             })
-        }else{
+        } else {
             link.getOptions().active = this.active
         }
+
     }
 
     getLinks(): { [id: string]: BoolLinkModel; } {
