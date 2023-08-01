@@ -3,10 +3,12 @@ import { Application } from "../Application";
 import { BaseModel, DiagramModel, LinkModel, NodeModel } from "@projectstorm/react-diagrams";
 import { WrapperNodeModel } from "../wrapperNode/WrapperNodeModel";
 import showToast from "../helpers/showAlert";
+import { useToast } from "./Toast/ToastContext";
 
 export default function Header(props: PropsWithChildren & { app: Application }) {
 
     const { app } = props
+    const { addToast } = useToast();
     const [file, setFile] = useState<File>()
     const [isWrapper, setIsWrapper] = useState(false)
     const [, forceUpdate] = useReducer(x => x + 1, 0)
@@ -23,7 +25,7 @@ export default function Header(props: PropsWithChildren & { app: Application }) 
         const fileReader = new FileReader()
 
         if (!file) {
-            showToast('toast_container', "Keine Datei zum laden ausgewählt", 'danger')
+            addToast("!!!Keine Datei zum laden ausgewählt", 'danger')
             return
         }
 

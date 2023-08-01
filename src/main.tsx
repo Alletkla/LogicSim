@@ -4,6 +4,7 @@ import App from './App'
 import { Application } from './Application'
 import BodyWidget from './components/BodyWidget'
 import Header from './components/Header'
+import { ToastProvider } from './components/Toast/ToastContext'
 
 let app = new Application()
 
@@ -17,9 +18,9 @@ let app = new Application()
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
   // <App />
-  <>
+  <ToastProvider>
     <Header app={app}></Header>
     <BodyWidget app={app} />
-  </>
+  </ToastProvider>
   // </React.StrictMode>,
 )
