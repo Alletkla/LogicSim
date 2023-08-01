@@ -1,22 +1,17 @@
 import * as _ from 'lodash';
 import TrayWidget from './TrayWidget';
-import { Application } from '../Application';
 import { TrayItemWidget } from './TrayItemWidget';
-import { DefaultNodeModel } from '@projectstorm/react-diagrams';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import DemoCanvasWidget from '../helpers/DemoCanvasWidget';
 import styled from '@emotion/styled';
-import { useReducer } from 'react';
+import { PropsWithChildren, useReducer } from 'react';
 import and from '../bool/defaultBoolNodes/and';
 import not from '../bool/defaultBoolNodes/not';
 import or from '../bool/defaultBoolNodes/or';
 import { BoolNodeModel } from '../bool/boolNode/BoolNodeModel';
 import { BoolSourceNodeModel } from '../bool/boolSourceNode/BoolSourceNodeModel';
 import { BoolTargetNodeModel } from '../bool/boolTargetNode/BoolTargetNodeModel';
-
-export interface BodyWidgetProps {
-	app: Application;
-}
+import { useApplication } from '../ApplicationContext';
 
 namespace S {
 	export const Body = styled.div`
@@ -41,8 +36,10 @@ namespace S {
 	`
 }
 
-export default function BodyWidget(props: BodyWidgetProps) {
+export default function BodyWidget(props:PropsWithChildren) {
+	//not good practice but is necessary from the library
 	const [, forceUpdate] = useReducer(x => x + 1, 0);
+	const app = useApplication()
 
 	return (
 		<S.Body>
@@ -85,9 +82,9 @@ export default function BodyWidget(props: BodyWidgetProps) {
 								break;
 						}
 
-						var point = props.app.getDiagramEngine().getRelativeMousePoint(event);
+						var point = app.getDiagramEngine().getRelativeMousePoint(event);
 						node.setPosition(point);
-						props.app.getDiagramEngine().getModel().addNode(node);
+						app.getDiagramEngine().getModel().addNode(node);
 						forceUpdate();
 					}}
 					onDragOver={(event) => {
@@ -95,7 +92,7 @@ export default function BodyWidget(props: BodyWidgetProps) {
 					}}
 				>
 					<DemoCanvasWidget>
-						<CanvasWidget engine={props.app.getDiagramEngine()} />
+						<CanvasWidget engine={app.getDiagramEngine()} />
 					</DemoCanvasWidget>
 				</S.Layer>
 			</S.Content>

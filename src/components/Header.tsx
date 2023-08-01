@@ -1,13 +1,12 @@
-import { MouseEvent, PropsWithChildren, useEffect, useReducer, useState } from "react";
-import { Application } from "../Application";
+import { MouseEvent, PropsWithChildren, useReducer, useState } from "react";
 import { BaseModel, DiagramModel, LinkModel, NodeModel } from "@projectstorm/react-diagrams";
 import { WrapperNodeModel } from "../wrapperNode/WrapperNodeModel";
-import showToast from "../helpers/showAlert";
 import { useToast } from "./Toast/ToastContext";
+import { useApplication } from "../ApplicationContext";
 
-export default function Header(props: PropsWithChildren & { app: Application }) {
+export default function Header(props: PropsWithChildren) {
 
-    const { app } = props
+    const app = useApplication()
     const { addToast } = useToast();
     const [file, setFile] = useState<File>()
     const [isWrapper, setIsWrapper] = useState(false)
