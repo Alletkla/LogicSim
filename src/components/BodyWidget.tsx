@@ -33,7 +33,6 @@ namespace S {
 export default function BodyWidget(props: PropsWithChildren) {
 	//not good practice but is necessary since library only updates object 
 	const app = useApplication()
-	const [nodeCount, setNodeCount] = useState(app.getActiveDiagram().getNodes().length)
 	const engine = app.getDiagramEngine()
 
 	function handleDrop(event: React.DragEvent<HTMLDivElement>) {
@@ -44,7 +43,6 @@ export default function BodyWidget(props: PropsWithChildren) {
 		var point = app.getDiagramEngine().getRelativeMousePoint(event);
 		clone.setPosition(point);
 		app.getDiagramEngine().getModel().addNode(clone);
-		setNodeCount(app.getActiveDiagram().getNodes().length)
 	}
 
 	const specialTrayItems = app.getBluePrintNodeModels().reduce((result, model) => {

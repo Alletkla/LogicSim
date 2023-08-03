@@ -20,8 +20,6 @@ diagramEngine.getNodeFactories().registerFactory(new BoolTargetNodeFactory())
 diagramEngine.getNodeFactories().registerFactory(new WrapperNodeFactory())
 diagramEngine.getLinkFactories().registerFactory(new BoolLinkFactory())
 diagramEngine.getPortFactories().registerFactory(new BoolPortModelFactory())
-
-diagramEngine.setModel(new SRD.DiagramModel())
 /**
  * 
  * @TODO Right Click Support for editing Sidebar Nodes
@@ -32,7 +30,7 @@ diagramEngine.setModel(new SRD.DiagramModel())
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
   // <App />
-  <ApplicationProvider engine={diagramEngine}>
+  <ApplicationProvider engine={diagramEngine} model={new SRD.DiagramModel()}>
     <ToastProvider>
       <Header></Header>
       <BodyWidget/>
