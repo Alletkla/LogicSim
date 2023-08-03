@@ -13,7 +13,6 @@ export default function ToastMessage({ message, type = 'danger', autohide = true
                 autohide: autohide,
                 delay: delay,
             });
-            console.log(autohide)
 
             toastBootstrap.show();
 

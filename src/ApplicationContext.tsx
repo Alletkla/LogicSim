@@ -1,83 +1,92 @@
-import { PropsWithChildren, createContext, useContext, useEffect } from "react";
+import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
 import * as RD from '@projectstorm/react-diagrams';
 import { BoolNodeModel } from "./bool/boolNode/BoolNodeModel";
+import { BoolSourceNodeModel } from "./bool/boolSourceNode/BoolSourceNodeModel";
+import { BoolTargetNodeModel } from "./bool/boolTargetNode/BoolTargetNodeModel";
 
 interface ApplicationContextProps {
     resetModel: () => void
     getActiveDiagram: () => RD.DiagramModel
     getDiagramEngine: () => RD.DiagramEngine
     setModel: (model: RD.DiagramModel) => void
+    addBluePrintNodeModel: (nodeModel: BoolNodeModel) => void,
+    removeBluePrintModel: (id: string) => void,
+    getBluePrintModel: (id: string) => BoolNodeModel,
+    getBluePrintNodeModels: () => BoolNodeModel[]
 }
 
 const ApplicationContext = createContext<ApplicationContextProps>(null)
 
-//put the fields in a closure, that they cant be directly modified
-function createApplicationProvider(){
- let activeModel: RD.DiagramModel
- let diagramEngine: RD.DiagramEngine
- let bluePrintNodeModels: BoolNodeModel[]
+export default function ApplicationProvider({ children, engine }: PropsWithChildren & { engine: RD.DiagramEngine })  {
+        const [bluePrintNodeModels, setBluePrintModels] = useState<BoolNodeModel[]>([
+            new BoolSourceNodeModel({ name: 'Eingang', color: 'rgb(0,192,255)' }),
+            new BoolTargetNodeModel({ name: 'Ausgang', color: 'rgb(0,255,192)' })
+        ])
+        const [activeModel, setActiveModel] = useState<RD.DiagramModel>(engine.getModel())
+        const [diagramEngine, setDiagramEngine] = useState(engine)
 
- const provider = ({children, engine, model}:PropsWithChildren & {engine: RD.DiagramEngine, model: RD.DiagramModel}) => {
-    diagramEngine = engine
-    diagramEngine.setModel(model)
-    
-    function resetModel(){
-        activeModel = new RD.DiagramModel()
-        diagramEngine.setModel(activeModel)
-    }
-
-    function getActiveDiagram(): RD.DiagramModel {
-        return activeModel
-    }
-
-    function getDiagramEngine(): RD.DiagramEngine {
-        return diagramEngine
-    }
-
-    function setModel(model: RD.DiagramModel) {
-        if (!model){
-            throw new Error("Model must not be null")
+        function resetModel() {
+            setActiveModel(new RD.DiagramModel())
+            diagramEngine.setModel(activeModel)
         }
-        this.activeModel = model
-    }
 
-    function getBluePrintNodeModels(){
-        return bluePrintNodeModels
-    }
-
-    function addBluePrintNodeModel(nodeModel: BoolNodeModel){
-        if (!nodeModel){
-            throw new Error('NodeModel must not be null')
+        function getActiveDiagram(): RD.DiagramModel {
+            return activeModel
         }
-        bluePrintNodeModels.push(nodeModel)
+
+        function getDiagramEngine(): RD.DiagramEngine {
+            return diagramEngine
+        }
+
+        function setModel(model: RD.DiagramModel) {
+            if (!model) {
+                throw new Error("Model must not be null")
+            }
+            diagramEngine.setModel(model)
+            setActiveModel(model)
+        }
+
+        function getBluePrintNodeModels() {
+            return bluePrintNodeModels
+        }
+
+        function getBluePrintModel(id: string) {
+            return bluePrintNodeModels.find(model => model.getID() === id)
+        }
+
+        function addBluePrintNodeModel(nodeModel: BoolNodeModel) {
+            if (!nodeModel) {
+                throw new Error('NodeModel must not be null')
+            }
+            setBluePrintModels(prev => [...prev, nodeModel])
+        }
+
+        function removeBluePrintModel(id: string) {
+            setBluePrintModels(prevModels => prevModels.filter((node) => node.getID() !== id))
+        }
+
+        const contextValue = {
+            resetModel,
+            getActiveDiagram,
+            getDiagramEngine,
+            setModel,
+            addBluePrintNodeModel,
+            removeBluePrintModel,
+            getBluePrintModel,
+            getBluePrintNodeModels,
+        }
+
+        return (
+            <ApplicationContext.Provider value={contextValue}>
+                {children}
+            </ApplicationContext.Provider>
+        )
     }
 
-    const contextValue = {
-        resetModel,
-        getActiveDiagram,
-        getDiagramEngine,
-        setModel,
-        getBluePrintNodeModels,
-        addBluePrintNodeModel
-    }
-
-    return (
-        <ApplicationContext.Provider value={contextValue}>
-            {children}
-        </ApplicationContext.Provider>
-    )
- }
-
- return provider
-}
-
-export function useApplication(){
+export function useApplication() {
     const context = useContext(ApplicationContext)
     if (!context) {
         throw new Error('useApplication must be used within a ApplicationContext')
     }
     return context
 }
-
-const ApplicationProvider = createApplicationProvider()
-export default ApplicationProvider

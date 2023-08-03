@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 
 export interface TrayItemWidgetProps {
-	model: any;
+	model: {id: string};
 	color?: string;
 	name: string;
 }
@@ -27,7 +27,7 @@ export class TrayItemWidget extends React.Component<TrayItemWidgetProps> {
 				color={this.props.color}
 				draggable={true}
 				onDragStart={(event) => {
-					event.dataTransfer.setData('storm-diagram-node', JSON.stringify(this.props.model));
+					event.dataTransfer.setData('storm-diagram-node', JSON.stringify(this.props.model.id));
 				}}
 				className="tray-item"
 			>

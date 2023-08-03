@@ -24,7 +24,7 @@ export default function Header(props: PropsWithChildren) {
         const fileReader = new FileReader()
 
         if (!file) {
-            addToast("!!!Keine Datei zum laden ausgewählt", 'danger')
+            addToast("Keine Datei zum laden ausgewählt!", 'danger')
             return
         }
 
@@ -32,7 +32,6 @@ export default function Header(props: PropsWithChildren) {
         fileReader.onload = event => {
             const newModel = new DiagramModel()
             newModel.deserializeModel(JSON.parse(event.target.result.toString()), app.getDiagramEngine())
-            console.log(isWrapper)
             if (isWrapper) {
                 var outerModel = new DiagramModel()
                 outerModel.addNode(new WrapperNodeModel(file.name.split('.')[0], 'rgb(0,100,100)', newModel))
@@ -40,12 +39,13 @@ export default function Header(props: PropsWithChildren) {
             } else {
                 app.setModel(newModel)
             }
-
         }
     }
 
     function handleSerialize(e: MouseEvent<HTMLButtonElement>) {
-        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(app.getActiveDiagram().serialize()));
+        const activeModel = app.getActiveDiagram()
+
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(activeModel.serialize()));
         var downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
         downloadAnchorNode.setAttribute("download", "Node.json");

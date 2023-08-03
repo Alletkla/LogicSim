@@ -20,17 +20,20 @@ diagramEngine.getNodeFactories().registerFactory(new BoolTargetNodeFactory())
 diagramEngine.getNodeFactories().registerFactory(new WrapperNodeFactory())
 diagramEngine.getLinkFactories().registerFactory(new BoolLinkFactory())
 diagramEngine.getPortFactories().registerFactory(new BoolPortModelFactory())
+
+diagramEngine.setModel(new SRD.DiagramModel())
 /**
  * 
- * @TODO Sidebar with all loaded nodes, clone the clicked node and add it to canvas
  * @TODO Right Click Support for editing Sidebar Nodes
- * @TODO wrapped Node doenst activate properly
+ * @TODO wrapped Node doenst activate properly when added through sidebar or directly loaded. but when loaded wrapped all is fine.
+ * @TODO When connecting an Node from "right to left" handlers aren't added properly
+ * @TODO preserve Model whn reloading
  */
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
   // <App />
-  <ApplicationProvider engine={diagramEngine} model={new SRD.DiagramModel}>
+  <ApplicationProvider engine={diagramEngine}>
     <ToastProvider>
       <Header></Header>
       <BodyWidget/>

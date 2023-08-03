@@ -45,6 +45,7 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
         }, <BoolPortModel[]>[]).map(
             (port, index) => {
                 port.getOptions().name = `In${index}`
+                port.getOptions().label = `In${index}`
                 this.addInPort(port)
             }
         )
@@ -56,6 +57,7 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
         }, <BoolPortModel[]>[]).map(
             (port, index) => {
                 port.getOptions().name = `Out${index}`
+                port.getOptions().label = `Out${index}`
                 this.addOutPort(port)
             }
         )
