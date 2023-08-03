@@ -26,7 +26,6 @@ diagramEngine.setModel(new SRD.DiagramModel())
  * 
  * @TODO Right Click Support for editing Sidebar Nodes
  * @TODO wrapped Node doenst activate properly when added through sidebar or directly loaded. but when loaded wrapped all is fine.
- * @TODO When connecting an Node from "right to left" handlers aren't added properly
  * @TODO preserve Model whn reloading
  */
 

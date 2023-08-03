@@ -1,4 +1,4 @@
-import { BaseEvent, BaseListener, DefaultPortModel, DefaultPortModelOptions, LinkModel, LinkModelGenerics, ListenerHandle, PortModelAlignment, PortModelListener } from "@projectstorm/react-diagrams";
+import { BaseEvent, BaseListener, DefaultPortModel, DefaultPortModelOptions, ListenerHandle, PortModelAlignment } from "@projectstorm/react-diagrams";
 import { BoolLinkModel } from "../boolLink/BoolLinkModel";
 
 export interface BoolPortModelListener extends BaseListener {
@@ -15,13 +15,14 @@ export class BoolPortModel extends DefaultPortModel {
     constructor(options: DefaultPortModelOptions); //second overload
     constructor(options: DefaultPortModelOptions | boolean, name?: string, label?: string) { //combined constructor
         //If name is not falsy (given) constructor 1: and therefore options is the parameter "isIn"
-        if (!!name) {
+        if (typeof options === "boolean") {
             options = {
                 in: !!options,
                 name: name,
                 label: label
             };
         }
+
         options = options as DefaultPortModelOptions;
         super({
             label: options.label || options.name,
@@ -41,18 +42,25 @@ export class BoolPortModel extends DefaultPortModel {
 
         if (this.getOptions().in) {
             this.active = link.getOptions().active
-            link.registerListener({
-                'targetPortChanged': (event) => {
-                    /**
-                     * @TODO deregister old Listener. Where to safe the handle?
-                     */
-                    // link.deregisterListener(listener)
-                    link.registerListener({
-                        'activeChanged': (event) => {
-                            event.isActive !== this.active && this.setActive(event.isActive)
-                        }
-                    })
+            const activeChangedListener = (event) => {
+                /**
+                 * @TODO deregister old Listener. Where to safe the handle?
+                 */
+                // link.deregisterListener(listener)
+                if (event.port !== this) {
+                    return
                 }
+                link.registerListener({
+                    'activeChanged': (event) => {
+                        event.isActive !== this.active && this.setActive(event.isActive)
+                    }
+                })
+            }
+            link.registerListener({
+                'targetPortChanged': activeChangedListener
+            })
+            link.registerListener({
+                'sourcePortChanged': activeChangedListener
             })
         } else {
             link.getOptions().active = this.active
