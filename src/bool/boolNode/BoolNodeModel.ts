@@ -56,7 +56,8 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         this.portsIn = [];
     }
 
-    doClone(lookupTable, clone) {
+    doClone(lookupTable: {}, clone: any) {
+        //ports need to be reseted in any case cause doClone calls addPort on super.getPorts(), where they are added again
         clone.portsIn = [];
         clone.portsOut = [];
         super.doClone(lookupTable, clone);
@@ -107,7 +108,7 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
     }
 
 
-    addInPort(label, after = true) {
+    addInPort(label: string, after: boolean = true) {
         const p = new BoolPortModel({
             in: true,
             name: label,
@@ -119,7 +120,7 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         }
         return this.addPort(p);
     }
-    addOutPort(label, after = true) {
+    addOutPort(label: string, after: boolean = true) {
         const p = new BoolPortModel({
             in: false,
             name: label,
@@ -145,17 +146,6 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         return this.portsIn;
     }
 
-    setInPorts(ports: BoolPortModel[]) {
-        this.portsIn = []
-        console.log(ports)
-        ports.forEach(port => this.addInPort(port))
-    }
-
-    setOutPorts(ports: BoolPortModel[]) {
-        this.portsOut = []
-        ports.forEach(port => this.addOutPort(port))
-    }
-
     deserialize(event: DeserializeEvent<this>) {
         //activationFun must be added first, cause its needed to activate the right Outputs while adding Ports
         //We are using indirect eval https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval?retiredLocale=de#never_use_eval!
@@ -164,8 +154,8 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         super.deserialize(event);
         this.options.name = event.data.name;
         this.options.color = event.data.color;
-        //the ports are added properly via .addPrt() in the super.deserialize()
-        //but the order is not preserved there, thats why this just sets directly
+        // the ports are added properly via .addPort() in the super.deserialize()
+        // but the order is not preserved there, thats why this just sets directly
         this.portsIn = _.map(event.data.portsInOrder, (id) => {
             return this.getPortFromID(id);
         });

@@ -1,5 +1,6 @@
-import { BaseEvent, BaseListener, DefaultPortModel, DefaultPortModelOptions, ListenerHandle, PortModelAlignment } from "@projectstorm/react-diagrams";
+import { BaseEvent, BaseListener, DefaultPortModel, DefaultPortModelOptions, DeserializeEvent, ListenerHandle, PortModelAlignment } from "@projectstorm/react-diagrams";
 import { BoolLinkModel } from "../boolLink/BoolLinkModel";
+import { BoolNodeModelSerialized } from "../boolNode/BoolNodeModel";
 
 export interface BoolPortModelListener extends BaseListener {
     activeChanged?(event: BaseEvent & {
@@ -8,6 +9,10 @@ export interface BoolPortModelListener extends BaseListener {
 }
 
 //dont Extend Defualt Portmodel... copy and use Generics
+
+export interface BoolPortModelSerialized extends ReturnType<DefaultPortModel['serialize']> {
+   active : boolean
+}
 export class BoolPortModel extends DefaultPortModel {
     active: boolean
 
@@ -30,6 +35,7 @@ export class BoolPortModel extends DefaultPortModel {
             type: 'bool',
             ...options
         });
+        this.options.name = this.options.name || this.getID()
         this.active = false
     }
 
@@ -86,5 +92,17 @@ export class BoolPortModel extends DefaultPortModel {
 
     registerListener(listener: BoolPortModelListener): ListenerHandle {
         return super.registerListener(listener)
+    }
+
+    //Ports dont need to deserialize the link, since its deserialized in the link layer and the ports are 
+    //added respectivly 
+    deserialize(event: DeserializeEvent<this>) {
+        super.deserialize(event);
+        this.setActive(event.data.active);
+    }
+    serialize(): BoolPortModelSerialized {
+        return Object.assign(Object.assign({}, super.serialize()), {
+            active: this.active
+        });
     }
 }

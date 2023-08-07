@@ -10,7 +10,6 @@ export default function Header(props: PropsWithChildren) {
     const { addToast } = useToast();
     const [file, setFile] = useState<File>()
     const [isWrapper, setIsWrapper] = useState(false)
-    const [, forceUpdate] = useReducer(x => x + 1, 0)
 
     // useEffect(() => {
     //     const style = document.createElement("link");
@@ -75,8 +74,6 @@ export default function Header(props: PropsWithChildren) {
             }
             (newItem as BaseModel).setSelected(false);
         });
-
-        forceUpdate()
     }
 
     return (
