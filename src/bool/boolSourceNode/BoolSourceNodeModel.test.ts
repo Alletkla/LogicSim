@@ -10,9 +10,7 @@ beforeEach(() => {
 
 describe('deserialize', () => {
     test('has same count of ports', () => {
-        const { serializedNode, deserializedNode } = NodeSerializeCycle(BoolSourceNodeModel, node)
-        console.log("Source", serializedNode)
-        console.log("deserialized", deserializedNode.getPorts())
+        const { deserializedNode } = NodeSerializeCycle(BoolSourceNodeModel, node)
         expect(Object.values(deserializedNode.getPorts()).length).toBe(2)
         expect(deserializedNode.getInPorts().length).toBe(1)
         expect(deserializedNode.getOutPorts().length).toBe(1)

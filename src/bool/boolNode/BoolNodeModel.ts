@@ -108,25 +108,42 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
     }
 
 
-    addInPort(label: string, after: boolean = true) {
-        const p = new BoolPortModel({
-            in: true,
-            name: label,
-            label: label,
-            alignment: PortModelAlignment.LEFT
-        });
+    addInPort(p: BoolPortModel, after?: boolean): ReturnType<BoolNodeModel['addPort']>;
+    addInPort(label: string, after?: boolean): ReturnType<BoolNodeModel['addPort']>;
+    addInPort(portOrLabel: string | BoolPortModel, after: boolean = true) {
+        let p: BoolPortModel
+        if (typeof portOrLabel === 'string') {
+            const label = portOrLabel
+            p = new BoolPortModel({
+                in: true,
+                name: label,
+                label: label,
+                alignment: PortModelAlignment.LEFT
+            });
+        } else {
+            p = portOrLabel
+        }
         if (!after) {
             this.portsIn.splice(0, 0, p);
         }
+
         return this.addPort(p);
     }
-    addOutPort(label: string, after: boolean = true) {
-        const p = new BoolPortModel({
-            in: false,
-            name: label,
-            label: label,
-            alignment: PortModelAlignment.RIGHT
-        });
+    addOutPort(p: BoolPortModel, after?: boolean): ReturnType<BoolNodeModel['addPort']>;
+    addOutPort(label: string, after?: boolean): ReturnType<BoolNodeModel['addPort']>
+    addOutPort(portOrLabel: string | BoolPortModel, after: boolean = true) {
+        let p: BoolPortModel
+        if (typeof portOrLabel === 'string') {
+            const label = portOrLabel
+            p = new BoolPortModel({
+                in: false,
+                name: label,
+                label: label,
+                alignment: PortModelAlignment.RIGHT
+            });
+        }else {
+            p = portOrLabel
+        }
 
         if (!after) {
             this.portsOut.splice(0, 0, p);

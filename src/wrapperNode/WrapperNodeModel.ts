@@ -32,7 +32,7 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
                 wrappee: wrappee
             };
         }
-        super(Object.assign({ type: 'wrapper', name: 'Untitled', color: 'rgb(0,192,255)', activationFun: null, wrappee: new DiagramModel()}, options));
+        super(Object.assign({ type: 'wrapper', name: 'Untitled', color: 'rgb(0,192,255)', activationFun: null, wrappee: new DiagramModel() }, options));
 
         this.constructFromWrappee(this.getOptions().wrappee)
     }
@@ -84,24 +84,43 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
     }
 
     /**
-     * WrapperNodeModel doens't create new Ports to keep reference to wrapped Port Nodes
+     * WrapperNodeModel doens't create new Ports to keep reference to wrapped Port Nodes. 
+     * Therefore Label and After are mandatory in this ovverride to give a user a first glance
+     * when trying to use it with only a label
      * @param p Port to add
+     * @param label Not Supported
      * @param after Wether to add it after (true) or in front of (false) the existing ports
      * @returns 
      */
-    override addInPort(p: BoolPortModel, after = true) {
+    addInPort(p: BoolPortModel, after?: boolean): ReturnType<BoolNodeModel['addPort']>;
+    addInPort(label: string, after: boolean): ReturnType<BoolNodeModel['addPort']>;
+    override addInPort(portOrLabel: string | BoolPortModel, after: boolean = true) {
+        if (typeof portOrLabel === 'string') {
+            throw new Error("Wrapper Node is only meant to forward ports and not to create new ones. Use a existing port.")
+        }
+        const p = portOrLabel
         if (!after) {
             this.portsIn.splice(0, 0, p);
         }
         return this.addPort(p);
     }
     /**
-     * WrapperNodeModel doens't create new Ports to keep reference to wrapped Port Nodes
+     * WrapperNodeModel doens't create new Ports to keep reference to wrapped Port Nodes. 
+     * Therefore Label and After are mandatory in this ovverride to give a user a first glance
+     * when trying to use it with only a label
      * @param p Port to add
+     * @param label Not Supported
      * @param after Wether to add it after (true) or in front of (false) the existing ports
      * @returns 
      */
-    override addOutPort(p: BoolPortModel, after = true) {
+
+    addOutPort(p: BoolPortModel, after?: boolean): ReturnType<BoolNodeModel['addPort']>;
+    addOutPort(label: string, after: boolean): ReturnType<BoolNodeModel['addPort']>
+    override addOutPort(portOrLabel: string | BoolPortModel, after: boolean = true) {
+        if (typeof portOrLabel === 'string') {
+            throw new Error("Wrapper Node is only meant to forward ports and not to create new ones. Use a existing port.")
+        }
+        const p = portOrLabel
         if (!after) {
             this.portsOut.splice(0, 0, p);
         }
@@ -109,7 +128,7 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
     }
 
     serialize(): WrapperNodeModelSerialized {
-        return Object.assign(Object.assign({}, super.serialize()), {wrappee: this.getOptions().wrappee.serialize()});
+        return Object.assign(Object.assign({}, super.serialize()), { wrappee: this.getOptions().wrappee.serialize() });
     }
 
     deserialize(event: DeserializeEvent<this>): void {
