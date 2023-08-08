@@ -40,12 +40,12 @@ export default function ApplicationProvider({ children, engine, model }: PropsWi
         })
         setActiveModel(model)
         diagramEngine.setModel(model)
+        forceUpdate()
     }
 
 
     function resetModel() {
-        setActiveModelAndListen(new RD.DiagramModel())
-        diagramEngine.setModel(activeModel)
+        setModel(new RD.DiagramModel())
     }
 
     function getActiveDiagram(): RD.DiagramModel {
@@ -75,6 +75,9 @@ export default function ApplicationProvider({ children, engine, model }: PropsWi
     function addBluePrintNodeModel(nodeModel: BoolNodeModel) {
         if (!nodeModel) {
             throw new Error('NodeModel must not be null')
+        }
+        if (bluePrintNodeModels.find(model => model.getOptions().name == nodeModel.getOptions().name)){
+            return
         }
         setBluePrintModels(prev => [...prev, nodeModel])
     }

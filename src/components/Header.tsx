@@ -1,8 +1,11 @@
-import { MouseEvent, PropsWithChildren, useReducer, useState } from "react";
+import { MouseEvent, PropsWithChildren, useState } from "react";
 import { BaseModel, DiagramModel, LinkModel, NodeModel } from "@projectstorm/react-diagrams";
 import { WrapperNodeModel } from "../wrapperNode/WrapperNodeModel";
 import { useToast } from "./Toast/ToastContext";
 import { useApplication } from "../ApplicationContext";
+import ModalDialog from "./Modals/ModalDialog";
+import HoverActivatedButton from "./Buttons/HoverActivatedButton";
+import SaveDialog from "./Modals/SaveDialog";
 
 export default function Header(props: PropsWithChildren) {
 
@@ -41,16 +44,23 @@ export default function Header(props: PropsWithChildren) {
         }
     }
 
-    function handleSerialize(e: MouseEvent<HTMLButtonElement>) {
+    function handleSave(e: MouseEvent<HTMLButtonElement>, fileName: string) {
         const activeModel = app.getActiveDiagram()
 
         var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(activeModel.serialize()));
         var downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "Node.json");
+        downloadAnchorNode.setAttribute("download", `${fileName}.json`);
         document.body.appendChild(downloadAnchorNode); // required for firefox
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
+    }
+
+    function handleSaveAndReuse(e: MouseEvent<HTMLButtonElement>, fileName: string) {
+        handleSave(e, fileName)
+        const wrapperNode = new WrapperNodeModel(fileName, 'rgb(0,100,100)', app.getActiveDiagram())
+        app.addBluePrintNodeModel(wrapperNode)
+        app.resetModel()
     }
 
     function cloneSelected() {
@@ -78,22 +88,34 @@ export default function Header(props: PropsWithChildren) {
 
     return (
         <>
-            <div className="d-flex mb-2 mt-2 flex-wrap">
+            <div className="d-flex mb-2 mt-2 flex-wrap align-items-center">
+                <h1 className="mx-3 my-0">Logic-Sim</h1>
+                <span className="me-2">Editor:</span>
                 <div className="d-flex justify-content-start align-items-center">
                     <div className="me-2 w-50">
                         {/* <label htmlFor="formFileSm" className="form-label">Load File:</label> */}
                         <input className="form-control form-control-sm" id="formFileSm" type="file" onChange={e => setFile(e.target.files[0])} />
                     </div>
-                    <div className="form-check me-2">
+                    {/* <div className="form-check me-2">
                         <input className="form-check-input" type="checkbox" value="" onChange={e => setIsWrapper(e.target.checked)} id="flexCheckDefault" />
                         <label className="form-check-label" htmlFor="flexCheckDefault">
                             Load wrapped
                         </label>
-                    </div>
-                    <button className="btn btn-primary" onClick={handleElementLoad}>Load Element</button>
+                    </div> */}
+                    <button className="btn btn-primary" onClick={handleElementLoad}>Edit Element</button>
                 </div>
-                <button className='btn btn-secondary ms-auto me-2' onClick={handleSerialize}>Save Element</button>
-                <button className='btn btn-secondary' onClick={cloneSelected}>Clone Selected</button>
+                <div className="ms-auto d-flex">
+                    {/* <button className='btn btn-secondary ms-auto me-2' onClick={handleSerialize}>Save Element</button> */}
+                    <SaveDialog id={"save"} title={"Save"} description={"Speichert die momentan bearbeitete Schaltung."} onButtonClick={handleSave}>
+                        <button type="button" className={`btn btn-primary me-2`} data-bs-toggle="modal" data-bs-target={`#save`}>Save</button>
+                    </SaveDialog>
+                    <SaveDialog id={"save_and_reuse"} title={"Save and Reuse"} description={"Speichert die momentan bearbeitete Schaltung und Stellt sie als Baustein links in der Seitenleise zur Verfügung."} onButtonClick={handleSaveAndReuse}>
+                        <button type="button" className={`btn btn-secondary me-2`} data-bs-toggle="modal" data-bs-target={`#save_and_reuse`}>Save and Reuse</button>
+                    </SaveDialog>
+                    <span className="vr border-2 me-2" />
+                    <HoverActivatedButton onClick={app.resetModel} className="btn btn-secondary me-2">Clear</HoverActivatedButton>
+                    <HoverActivatedButton onClick={cloneSelected} className="btn btn-secondary me-2">Clone Selected</HoverActivatedButton>
+                </div>
             </div>
             <div id="toast_container" className="toast-container position-fixed top-0 end-0 p-3">
             </div>

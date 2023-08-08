@@ -4,8 +4,12 @@ import { TrayItemWidget } from './TrayItemWidget';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import DemoCanvasWidget from '../helpers/DemoCanvasWidget';
 import styled from '@emotion/styled';
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { useApplication } from '../ApplicationContext';
+import and from '../bool/defaultBoolNodes/and';
+import not from '../bool/defaultBoolNodes/not';
+import or from '../bool/defaultBoolNodes/or';
+import ModalDialog from './Modals/ModalDialog';
 
 namespace S {
 	export const Body = styled.div`
@@ -35,6 +39,12 @@ export default function BodyWidget(props: PropsWithChildren) {
 	const app = useApplication()
 	const engine = app.getDiagramEngine()
 
+	useEffect(() => {
+		app.addBluePrintNodeModel(and().node)
+		app.addBluePrintNodeModel(not().node)
+		app.addBluePrintNodeModel(or().node)
+	}, [])
+
 	function handleDrop(event: React.DragEvent<HTMLDivElement>) {
 		var id = JSON.parse(event.dataTransfer.getData('storm-diagram-node'));
 		const model = app.getBluePrintModel(id)
@@ -48,7 +58,7 @@ export default function BodyWidget(props: PropsWithChildren) {
 	const specialTrayItems = app.getBluePrintNodeModels().reduce((result, model) => {
 		const type = model.getType()
 		if (type === 'boolSource' || type === 'boolTarget') {
-			result.push(<TrayItemWidget key={model.getID()} model={{'id': model.getID()}} name={model.getOptions().name} color={model.getOptions().color}></TrayItemWidget>)
+			result.push(<TrayItemWidget key={model.getID()} model={{ 'id': model.getID() }} name={model.getOptions().name} color={model.getOptions().color}></TrayItemWidget>)
 		}
 		return result
 	}, [])
@@ -62,10 +72,14 @@ export default function BodyWidget(props: PropsWithChildren) {
 		return result
 	}, [])
 
-	// engine.setModel(app.getActiveDiagram())
-
 	return (
 		<S.Body>
+			<div className='position-absolute bottom-0 start-0 m-3'>
+				<ModalDialog id={"help"} title={"Help"}>
+					You can select multiple nodes and especially links by pressing [SHIFT] while holding down the left mouse button.
+				</ModalDialog>
+				<button type="button" className={`fs-1 btn btn-primary me-2 rounded-circle`} data-bs-toggle="modal" data-bs-target={`#help`}>?</button>
+			</div>
 			<S.Content>
 				<S.TrayContainer className="d-flex flex-column">
 					<TrayWidget readOnly={true}>
