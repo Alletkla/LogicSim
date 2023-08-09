@@ -10,6 +10,7 @@ import and from '../bool/defaultBoolNodes/and';
 import not from '../bool/defaultBoolNodes/not';
 import or from '../bool/defaultBoolNodes/or';
 import ModalDialog from './Modals/ModalDialog';
+import { useToast } from './Toast/ToastContext';
 
 namespace S {
 	export const Body = styled.div`
@@ -37,12 +38,15 @@ namespace S {
 export default function BodyWidget(props: PropsWithChildren) {
 	//not good practice but is necessary since library only updates object 
 	const app = useApplication()
+	const toast = useToast()
 	const engine = app.getDiagramEngine()
 
 	useEffect(() => {
 		app.addBluePrintNodeModel(and().node)
 		app.addBluePrintNodeModel(not().node)
 		app.addBluePrintNodeModel(or().node)
+
+		toast.addToast("This App does not support Touch Devices yet.", "warning")
 	}, [])
 
 	function handleDrop(event: React.DragEvent<HTMLDivElement>) {

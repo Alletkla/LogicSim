@@ -8,17 +8,23 @@ export interface Toast {
 }
 
 interface ToastContextProps {
-    addToast: (message: string, type: string) => void;
+    addToast: (message: string, type: string, delay?: number) => void;
     removeToast: (index: number) => void;
 }
 
 const ToastContext = createContext<ToastContextProps>(null)
 
 export function ToastProvider({ children }: PropsWithChildren) {
-    const [toasts, setToasts] = useState([])
+    const [toasts, setToasts] = useState<{message: string, type: string, delay: number}[]>([])
 
-    function addToast(message: string, type: string) {
-        setToasts(prevToasts => [...prevToasts, { message, type }])
+    /**
+     * Adds a new Toast to the Context
+     * @param message to print in the toast
+     * @param type Bootstrap type [primary, secondary, success, danger, warning, info, light, dark]
+     * @param delay Set to -1 for not autohiding the toast
+     */
+    function addToast(message: string, type: string, delay?: number) {
+        setToasts(prevToasts => [...prevToasts, { message, type,  delay}])
     }
 
     function removeToast(index: number) {
@@ -31,7 +37,7 @@ export function ToastProvider({ children }: PropsWithChildren) {
             <div id="toast_container" className="toast-container position-fixed top-0 end-0 p-3">
                 {/* @TODO dont use index as key */}
                 {toasts.map((toast, index) => (
-                    <ToastMessage key={index} message={toast.message} type={toast.type} onClose={() => removeToast(index)} />
+                    <ToastMessage key={index} message={toast.message} type={toast.type} onClose={() => removeToast(index)} autohide={toast.delay !== -1}  delay={toast.delay}/>
                 ))}
             </div>
         </ToastContext.Provider>
