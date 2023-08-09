@@ -14,13 +14,15 @@
   -webkit-text-size-adjust: 100%;
 }
 
-html, body, #root{
-	height: 100%;
-	overflow: hidden;
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-	margin: 0;
+  margin: 0;
 }
 
 @import "../node_modules/bootstrap";

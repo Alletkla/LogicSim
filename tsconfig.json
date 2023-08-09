@@ -18,10 +18,11 @@
     "jsx": "react-jsx",
 
     /* Linting */
-    "strict": false,
+    "strict": false,                            /* Skip type checking all .d.ts files. */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true                            /* Skip type checking all .d.ts files. */
+    "noFallthroughCasesInSwitch": true,                           
+    "noImplicitOverride": true
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

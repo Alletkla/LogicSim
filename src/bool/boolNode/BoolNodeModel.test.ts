@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test } from "@jest/globals";
 import { BoolNodeModel } from "./BoolNodeModel";
 import * as _ from 'lodash'
-import { NodeSerializeCycle, deserializeNode, diagramEngine } from "../../helpers/testEnv";
+import { NodeSerializeCycle } from "../../helpers/testEnv";
 
 
 let node: BoolNodeModel

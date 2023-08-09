@@ -1,10 +1,5 @@
-import {
-	DefaultPortLabel,
-	DiagramEngine,
-} from "@projectstorm/react-diagrams";
-import { ChangeEvent, Component } from "react";
+import { DiagramEngine, } from "@projectstorm/react-diagrams";
 import { BoolNodeModel } from "./BoolNodeModel";
-import { BoolPortModel } from "../boolPort/BoolPortModel";
 import styled from '@emotion/styled';
 import * as _ from 'lodash'
 import BoolPortLabelWidget from "../boolPort/BoolPortLabelWidget";

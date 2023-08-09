@@ -1,5 +1,5 @@
 import './index.scss'
-import 'bootstrap'
+import { modal } from 'bootstrap'
 import ReactDOM from 'react-dom/client'
 import BodyWidget from './components/BodyWidget'
 import Header from './components/Header'
@@ -34,7 +34,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <ApplicationProvider engine={diagramEngine} model={new SRD.DiagramModel()}>
     <ToastProvider>
       <Header></Header>
-      <BodyWidget/>
+      <BodyWidget />
     </ToastProvider>
   </ApplicationProvider>
   // </React.StrictMode>,

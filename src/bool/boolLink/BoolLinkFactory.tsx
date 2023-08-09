@@ -31,15 +31,15 @@ export class BoolLinkFactory extends DefaultLinkFactory {
 		super('bool');
 	}
 
-	generateReactWidget(event: any) {
-        return <BoolLinkWidget link={event.model} diagramEngine={this.engine} active={event.model.getOptions().active}/>
-    }
+	override generateReactWidget(event: any) {
+		return <BoolLinkWidget link={event.model} diagramEngine={this.engine} active={event.model.getOptions().active} />
+	}
 
-	generateModel(): BoolLinkModel {
+	override generateModel(): BoolLinkModel {
 		return new BoolLinkModel();
 	}
 
-	generateLinkSegment(model: BoolLinkModel, selected: boolean, path: string) {
+	override generateLinkSegment(model: BoolLinkModel, selected: boolean, path: string) {
 		let color = model.getOptions().active ? model.getOptions().activatedColor : model.getOptions().color
 		return (
 			<S.Path

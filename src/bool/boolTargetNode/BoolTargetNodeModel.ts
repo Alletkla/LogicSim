@@ -1,8 +1,8 @@
-import { BoolNodeModel, BoolNodeModelActivFuncs, BoolNodeModelOptions } from "../boolNode/BoolNodeModel";
+import { BoolNodeModel, BoolNodeModelOptions } from "../boolNode/BoolNodeModel";
 import { BoolPortModel } from "../boolPort/BoolPortModel";
 
 
-export interface BoolTargetModelOptions extends BoolNodeModelOptions{
+export interface BoolTargetModelOptions extends BoolNodeModelOptions {
 }
 
 export class BoolTargetNodeModel extends BoolNodeModel {
@@ -16,7 +16,7 @@ export class BoolTargetNodeModel extends BoolNodeModel {
                 name: nameOrOptions,
                 color: color,
             };
-        }else {
+        } else {
             options = <BoolTargetModelOptions>nameOrOptions
         }
         super({
@@ -30,14 +30,14 @@ export class BoolTargetNodeModel extends BoolNodeModel {
         this.addOutPort('Out')
     }
 
-    addInPort(label, after = true) {
+    override addInPort(label, after = true) {
         if (this.getInPorts().length >= 1) {
             throw new Error("A BoolTargetNode can't have more than 1 input port, since inPorts need to be forwared to outputs for programmatically handling e.g. for wrappers")
         }
         return super.addInPort(label, after)
     }
 
-    addOutPort(label, after = true) {
+    override addOutPort(label, after = true) {
         if (this.getOutPorts().length >= 1) {
             throw new Error("A BoolTargetNode can't have more than 1 output port, since the only Outpurt is meant for programmatically forwarding signals e.g. for wrappers")
         }

@@ -3,14 +3,14 @@ import { BezierCurve } from '@projectstorm/geometry';
 import { BoolPortModel } from "../boolPort/BoolPortModel";
 
 export interface BoolLinkModelOptions extends DefaultLinkModelOptions {
-    activatedColor?: string;
-    active?: boolean;
+	activatedColor?: string;
+	active?: boolean;
 }
 
 export interface BoolLinkModelListener extends DefaultLinkModelListener {
 	activeChanged?(event: BaseEvent & {
-        isActive: boolean;
-    }): void;
+		isActive: boolean;
+	}): void;
 }
 
 
@@ -30,8 +30,8 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 			curvyness: 50,
 			...options
 		});
-        this.options.activatedColor = options.activatedColor || 'rgb(0,255,0)',
-        this.options.active = options.active || this.getSourcePort()?.isActive() || false
+		this.options.activatedColor = options.activatedColor || 'rgb(0,255,0)',
+			this.options.active = options.active || this.getSourcePort()?.isActive() || false
 	}
 
 	calculateControlOffset(port: PortModel): [number, number] {
@@ -63,8 +63,8 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 			return curve.getSVGCurve();
 		}
 	}
-//TODO (look at DefaultLinkModel.js)
-	serialize() {
+	//TODO (look at DefaultLinkModel.js)
+	override serialize() {
 		return {
 			...super.serialize(),
 			width: this.options.width,
@@ -73,8 +73,8 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 			selectedColor: this.options.selectedColor
 		};
 	}
-//TODO (look at DefaultLinkModel.js)
-	deserialize(event: DeserializeEvent<this>) {
+	//TODO (look at DefaultLinkModel.js)
+	override deserialize(event: DeserializeEvent<this>) {
 		super.deserialize(event);
 		this.options.color = event.data.color;
 		this.options.width = event.data.width;
@@ -82,7 +82,7 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 		this.options.selectedColor = event.data.selectedColor;
 	}
 
-	addLabel(label: LabelModel | string) {
+	override addLabel(label: LabelModel | string) {
 		if (label instanceof LabelModel) {
 			return super.addLabel(label);
 		}
@@ -106,15 +106,15 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 		this.fireEvent({ isActive: active }, 'activeChanged')
 	}
 
-    getSourcePort(): BoolPortModel | null {
-        return super.getSourcePort() as BoolPortModel
-    }
+	override getSourcePort(): BoolPortModel | null {
+		return super.getSourcePort() as BoolPortModel
+	}
 
-	getTargetPort(): BoolPortModel | null {
-        return super.getTargetPort() as BoolPortModel
-    }
+	override getTargetPort(): BoolPortModel | null {
+		return super.getTargetPort() as BoolPortModel
+	}
 
-	registerListener(listener: BoolLinkModelListener): ListenerHandle {
+	override registerListener(listener: BoolLinkModelListener): ListenerHandle {
 		return super.registerListener(listener)
 	}
 }

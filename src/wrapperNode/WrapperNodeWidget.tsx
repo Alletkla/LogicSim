@@ -2,7 +2,6 @@ import {
     DiagramEngine,
 } from "@projectstorm/react-diagrams";
 import { Component } from "react";
-import { BoolSourceNodeModel } from "../bool/boolSourceNode/BoolSourceNodeModel";
 import styled from '@emotion/styled';
 import * as _ from 'lodash'
 import BoolPortLabelWidget from "../bool/boolPort/BoolPortLabelWidget";
@@ -68,7 +67,7 @@ export class WrapperNodeWidget extends Component<WrapperNodeWidgetProps> {
         );
     };
 
-    render() {
+    override render() {
         return (
             <S.Node
                 data-default-node-name={this.props.node.getOptions().name}

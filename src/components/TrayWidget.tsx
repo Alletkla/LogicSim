@@ -43,7 +43,7 @@ export default function TrayWidget(props: PropsWithChildren & { readOnly?: boole
 			<Dropzone onDrop={handleLoad}>
 				{({ getRootProps, getInputProps }) => (
 					<S.DropZone className='btn btn-outline-success mx-2 mt-2 border border-3 border-success rounded-2'>
-						<div {...getRootProps({className: 'd-flex flex-column justify-content-center'})}>
+						<div {...getRootProps({ className: 'd-flex flex-column justify-content-center' })}>
 							<input {...getInputProps()} />
 							<span>Drag 'n' drop here</span>
 							<span className='btn btn-success rounded-circle mx-auto'>+</span>
@@ -51,6 +51,6 @@ export default function TrayWidget(props: PropsWithChildren & { readOnly?: boole
 						</div>
 					</S.DropZone>
 				)}
-			</Dropzone>		}
+			</Dropzone>}
 	</S.Tray>;
 }

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test } from "@jest/globals";
 import { WrapperNodeModel } from "./WrapperNodeModel";
 
-let node : WrapperNodeModel
+let node: WrapperNodeModel
 beforeEach(() => {
     node = new WrapperNodeModel()
 })

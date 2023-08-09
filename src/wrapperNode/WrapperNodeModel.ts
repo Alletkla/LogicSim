@@ -92,8 +92,8 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
      * @param after Wether to add it after (true) or in front of (false) the existing ports
      * @returns 
      */
-    addInPort(p: BoolPortModel, after?: boolean): ReturnType<BoolNodeModel['addPort']>;
-    addInPort(label: string, after: boolean): ReturnType<BoolNodeModel['addPort']>;
+    override addInPort(p: BoolPortModel, after?: boolean): ReturnType<BoolNodeModel['addPort']>;
+    override addInPort(label: string, after: boolean): ReturnType<BoolNodeModel['addPort']>;
     override addInPort(portOrLabel: string | BoolPortModel, after: boolean = true) {
         if (typeof portOrLabel === 'string') {
             throw new Error("Wrapper Node is only meant to forward ports and not to create new ones. Use a existing port.")
@@ -114,8 +114,8 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
      * @returns 
      */
 
-    addOutPort(p: BoolPortModel, after?: boolean): ReturnType<BoolNodeModel['addPort']>;
-    addOutPort(label: string, after: boolean): ReturnType<BoolNodeModel['addPort']>
+    override addOutPort(p: BoolPortModel, after?: boolean): ReturnType<BoolNodeModel['addPort']>;
+    override addOutPort(label: string, after: boolean): ReturnType<BoolNodeModel['addPort']>
     override addOutPort(portOrLabel: string | BoolPortModel, after: boolean = true) {
         if (typeof portOrLabel === 'string') {
             throw new Error("Wrapper Node is only meant to forward ports and not to create new ones. Use a existing port.")
@@ -127,11 +127,11 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
         return this.addPort(p);
     }
 
-    serialize(): WrapperNodeModelSerialized {
+    override serialize(): WrapperNodeModelSerialized {
         return Object.assign(Object.assign({}, super.serialize()), { wrappee: this.getOptions().wrappee.serialize() });
     }
 
-    deserialize(event: DeserializeEvent<this>): void {
+    override deserialize(event: DeserializeEvent<this>): void {
         super.deserialize(event)
 
         let model = new DiagramModel()

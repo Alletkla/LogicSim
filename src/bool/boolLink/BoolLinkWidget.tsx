@@ -31,7 +31,7 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 		return this.props.renderPoints ?? true;
 	}
 
-	componentDidUpdate(): void {
+	override componentDidUpdate(): void {
 		this.props.link.setRenderedPaths(
 			this.refPaths.map((ref) => {
 				return ref.current!;
@@ -40,7 +40,7 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 		this.props.diagramEngine.repaintCanvas()
 	}
 
-	componentDidMount(): void {
+	override componentDidMount(): void {
 		this.props.link.setRenderedPaths(
 			this.refPaths.map((ref) => {
 				return ref.current!;
@@ -55,9 +55,9 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 
 		//Only listen to SourcePortChanges since they change the active state of the link
 		const sourcePort = this.props.link.getSourcePort()
-		if (sourcePort){
+		if (sourcePort) {
 			sourcePort.registerListener(listener)
-		}else{
+		} else {
 			this.props.link.registerListener({
 				'sourcePortChanged': (event) => event.port.registerListener(listener)
 			})
@@ -65,7 +65,7 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 
 	}
 
-	componentWillUnmount(): void {
+	override componentWillUnmount(): void {
 		this.props.link.setRenderedPaths([]);
 	}
 
@@ -115,7 +115,7 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 		);
 	}
 
-	render() {
+	override render() {
 		//ensure id is present for all points on the path
 		var points = this.props.link.getPoints();
 		var paths = [];

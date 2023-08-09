@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
 import TrayWidget from './TrayWidget';
-import { TrayItemWidget } from './TrayItemWidget';
+import TrayItemWidget from './TrayItemWidget';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import DemoCanvasWidget from '../helpers/DemoCanvasWidget';
 import styled from '@emotion/styled';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { useApplication } from '../ApplicationContext';
 import and from '../bool/defaultBoolNodes/and';
 import not from '../bool/defaultBoolNodes/not';

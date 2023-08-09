@@ -10,7 +10,7 @@ import { WrapperNodeFactory } from '../wrapperNode/WrapperNodeFactory';
 export function NodeSerializeCycle<T extends BoolNodeModel>(type: (new (...args: any[]) => T), node: T) {
     //dont know why this extra typecast is neccessary since T is of Type T and return Tyoe of T.serialize is ReturnType<T['serialize']>, 
     //but it is
-    const serializedNode  = node.serialize() as ReturnType<T['serialize']>
+    const serializedNode = node.serialize() as ReturnType<T['serialize']>
     const deserializedNode = deserializeNode<T>(type, serializedNode, diagramEngine)
 
     return { serializedNode, deserializedNode }

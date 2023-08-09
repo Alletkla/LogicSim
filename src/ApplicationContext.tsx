@@ -76,7 +76,7 @@ export default function ApplicationProvider({ children, engine, model }: PropsWi
         if (!nodeModel) {
             throw new Error('NodeModel must not be null')
         }
-        if (bluePrintNodeModels.find(model => model.getOptions().name == nodeModel.getOptions().name)){
+        if (bluePrintNodeModels.find(model => model.getOptions().name == nodeModel.getOptions().name)) {
             return
         }
         setBluePrintModels(prev => [...prev, nodeModel])

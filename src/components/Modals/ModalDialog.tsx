@@ -1,4 +1,4 @@
-import { MouseEvent, PropsWithChildren, useState } from "react";
+import { MouseEvent, PropsWithChildren } from "react";
 
 export default function ModalDialog(props: PropsWithChildren & {
     id: string

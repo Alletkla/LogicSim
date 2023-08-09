@@ -56,14 +56,14 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         this.portsIn = [];
     }
 
-    doClone(lookupTable: {}, clone: any) {
+    override doClone(lookupTable: {}, clone: any) {
         //ports need to be reseted in any case cause doClone calls addPort on super.getPorts(), where they are added again
         clone.portsIn = [];
         clone.portsOut = [];
         super.doClone(lookupTable, clone);
     }
 
-    removePort(port: BoolPortModel) {
+    override removePort(port: BoolPortModel) {
         super.removePort(port);
         if (port.getOptions().in) {
             port.deregisterListener(this.inPortListenerHandle)
@@ -74,7 +74,7 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         }
     }
 
-    getOptions(): G['OPTIONS'] {
+    override getOptions(): G['OPTIONS'] {
         return super.getOptions()
     }
 
@@ -82,7 +82,7 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         return this.getOptions().activationFun
     }
 
-    addPort(port: BoolPortModel) {
+    override addPort(port: BoolPortModel) {
         super.addPort(port);
         if (port.getOptions().in) {
             if (this.getActivationFun()) {
@@ -141,7 +141,7 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
                 label: label,
                 alignment: PortModelAlignment.RIGHT
             });
-        }else {
+        } else {
             p = portOrLabel
         }
 
@@ -151,7 +151,7 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         return this.addPort(p);
     }
 
-    getPort(name: string): BoolPortModel | null {
+    override getPort(name: string): BoolPortModel | null {
         return super.getPort(name) as BoolPortModel
     }
 
@@ -163,7 +163,7 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         return this.portsIn;
     }
 
-    deserialize(event: DeserializeEvent<this>) {
+    override deserialize(event: DeserializeEvent<this>) {
         //activationFun must be added first, cause its needed to activate the right Outputs while adding Ports
         //We are using indirect eval https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval?retiredLocale=de#never_use_eval!
         const desFunc = eval?.(event.data.activationFun);
@@ -180,7 +180,7 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
             return this.getPortFromID(id);
         });
     }
-    serialize(): BoolNodeModelSerialized {
+    override serialize(): BoolNodeModelSerialized {
         return Object.assign(Object.assign({}, super.serialize()), {
             name: this.options.name,
             color: this.options.color,

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Toast } from 'bootstrap';
 
 export default function ToastMessage({ message, type = 'danger', autohide = true, delay = 5000, onClose }) {
-    const [showToast, setShowToast] = useState(true);
+    const [showToast,] = useState(true);
     const toastRef = useRef()
 
     useEffect(() => {

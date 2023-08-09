@@ -1,6 +1,5 @@
 import { BaseEvent, BaseListener, DefaultPortModel, DefaultPortModelOptions, DeserializeEvent, ListenerHandle, PortModelAlignment } from "@projectstorm/react-diagrams";
 import { BoolLinkModel } from "../boolLink/BoolLinkModel";
-import { BoolNodeModelSerialized } from "../boolNode/BoolNodeModel";
 
 export interface BoolPortModelListener extends BaseListener {
     activeChanged?(event: BaseEvent & {
@@ -11,7 +10,7 @@ export interface BoolPortModelListener extends BaseListener {
 //dont Extend Defualt Portmodel... copy and use Generics
 
 export interface BoolPortModelSerialized extends ReturnType<DefaultPortModel['serialize']> {
-   active : boolean
+    active: boolean
 }
 export class BoolPortModel extends DefaultPortModel {
     active: boolean
@@ -39,11 +38,11 @@ export class BoolPortModel extends DefaultPortModel {
         this.active = false
     }
 
-    createLinkModel(): BoolLinkModel {
+    override createLinkModel(): BoolLinkModel {
         return new BoolLinkModel();
     }
 
-    addLink(link: BoolLinkModel): void {
+    override addLink(link: BoolLinkModel): void {
         super.addLink(link)
 
         if (this.getOptions().in) {
@@ -74,7 +73,7 @@ export class BoolPortModel extends DefaultPortModel {
 
     }
 
-    getLinks(): { [id: string]: BoolLinkModel; } {
+    override getLinks(): { [id: string]: BoolLinkModel; } {
         return super.getLinks() as { [id: string]: BoolLinkModel }
     }
 
@@ -90,17 +89,17 @@ export class BoolPortModel extends DefaultPortModel {
         return this.active
     }
 
-    registerListener(listener: BoolPortModelListener): ListenerHandle {
+    override registerListener(listener: BoolPortModelListener): ListenerHandle {
         return super.registerListener(listener)
     }
 
     //Ports dont need to deserialize the link, since its deserialized in the link layer and the ports are 
     //added respectivly 
-    deserialize(event: DeserializeEvent<this>) {
+    override deserialize(event: DeserializeEvent<this>) {
         super.deserialize(event);
         this.setActive(event.data.active);
     }
-    serialize(): BoolPortModelSerialized {
+    override serialize(): BoolPortModelSerialized {
         return Object.assign(Object.assign({}, super.serialize()), {
             active: this.active
         });

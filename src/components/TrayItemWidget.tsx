@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 
-export interface TrayItemWidgetProps {
-	model: {id: string};
+export interface TrayItemWidgetProps extends React.PropsWithChildren {
+	model: { id: string };
 	color?: string;
 	name: string;
 }
@@ -20,19 +20,17 @@ namespace S {
 	`;
 }
 
-export class TrayItemWidget extends React.Component<TrayItemWidgetProps> {
-	render() {
-		return (
-			<S.Tray
-				color={this.props.color}
-				draggable={true}
-				onDragStart={(event) => {
-					event.dataTransfer.setData('storm-diagram-node', JSON.stringify(this.props.model.id));
-				}}
-				className="tray-item"
-			>
-				{this.props.name}
-			</S.Tray>
-		);
-	}
+export default function TrayItemWidget(props: TrayItemWidgetProps) {
+	return (
+		<S.Tray
+			color={props.color}
+			draggable={true}
+			onDragStart={(event) => {
+				event.dataTransfer.setData('storm-diagram-node', JSON.stringify(props.model.id));
+			}}
+			className="tray-item"
+		>
+			{props.name}
+		</S.Tray>
+	);
 }

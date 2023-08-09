@@ -56,15 +56,15 @@ namespace S {
 }
 
 export default function DemoCanvasWidget(props: React.PropsWithChildren<DemoCanvasWidgetProps>) {
-		return (
-			<>
-				<Global styles={S.Expand} />
-				<S.Container
-					background={props.background || 'rgb(60, 60, 60)'}
-					color={props.color || 'rgba(255,255,255, 0.05)'}
-				>
-					{props.children}
-				</S.Container>
-			</>
-		);
+	return (
+		<>
+			<Global styles={S.Expand} />
+			<S.Container
+				background={props.background || 'rgb(60, 60, 60)'}
+				color={props.color || 'rgba(255,255,255, 0.05)'}
+			>
+				{props.children}
+			</S.Container>
+		</>
+	);
 }

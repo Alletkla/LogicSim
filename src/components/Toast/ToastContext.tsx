@@ -29,7 +29,7 @@ export function ToastProvider({ children }: PropsWithChildren) {
         <ToastContext.Provider value={{ addToast, removeToast }}>
             {children}
             <div id="toast_container" className="toast-container position-fixed top-0 end-0 p-3">
-{/* @TODO dont use index as key */}
+                {/* @TODO dont use index as key */}
                 {toasts.map((toast, index) => (
                     <ToastMessage key={index} message={toast.message} type={toast.type} onClose={() => removeToast(index)} />
                 ))}
@@ -38,7 +38,7 @@ export function ToastProvider({ children }: PropsWithChildren) {
     )
 }
 
-export function useToast(){
+export function useToast() {
     const context = useContext(ToastContext)
     if (!context) {
         throw new Error('useToast must be used within a ToastProvider')
