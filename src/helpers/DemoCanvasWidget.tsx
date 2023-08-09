@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 import { css, Global } from '@emotion/react';
 
@@ -55,7 +55,7 @@ namespace S {
 	`;
 }
 
-export default function DemoCanvasWidget(props: React.PropsWithChildren<DemoCanvasWidgetProps>) {
+export default function DemoCanvasWidget(props: PropsWithChildren<DemoCanvasWidgetProps>) {
 	return (
 		<>
 			<Global styles={S.Expand} />

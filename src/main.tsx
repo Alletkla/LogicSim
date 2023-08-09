@@ -1,5 +1,4 @@
 import './index.scss'
-import { modal } from 'bootstrap'
 import ReactDOM from 'react-dom/client'
 import BodyWidget from './components/BodyWidget'
 import Header from './components/Header'

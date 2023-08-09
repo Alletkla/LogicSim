@@ -1,7 +1,7 @@
-import * as React from 'react';
 import styled from '@emotion/styled';
+import { PropsWithChildren } from 'react';
 
-export interface TrayItemWidgetProps extends React.PropsWithChildren {
+export interface TrayItemWidgetProps extends PropsWithChildren {
 	model: { id: string };
 	color?: string;
 	name: string;

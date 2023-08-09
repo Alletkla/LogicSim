@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { DiagramEngine, PortWidget } from '@projectstorm/react-diagrams-core';
 import styled from '@emotion/styled';
 import { BoolPortModel } from './BoolPortModel';
+import { PropsWithChildren } from 'react';
 
-interface BoolPortLabelWidgetProps extends React.PropsWithChildren<any> {
+interface BoolPortLabelWidgetProps extends PropsWithChildren {
 	port: BoolPortModel,
 	engine: DiagramEngine,
 	manual?: boolean,
