@@ -1,6 +1,6 @@
 import { AbstractReactFactory, DiagramEngine, GenerateModelEvent, GenerateWidgetEvent } from "@projectstorm/react-diagrams";
 import { WrapperNodeModel } from "./WrapperNodeModel";
-import { WrapperNodeWidget } from "./WrapperNodeWidget";
+import WrapperNodeWidget from "./WrapperNodeWidget";
 
 export class WrapperNodeFactory extends AbstractReactFactory<WrapperNodeModel, DiagramEngine>{
     constructor() {
