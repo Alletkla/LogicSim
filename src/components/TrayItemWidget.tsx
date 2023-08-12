@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
-import { PropsWithChildren } from 'react';
+import { KeyboardEvent, PropsWithChildren, useState } from 'react';
+import { BoolNodeModel } from '../bool/boolNode/BoolNodeModel';
 
 export interface TrayItemWidgetProps extends PropsWithChildren {
-	model: { id: string };
-	color?: string;
-	name: string;
+	model: BoolNodeModel;
 }
 
 namespace S {
@@ -21,16 +20,42 @@ namespace S {
 }
 
 export default function TrayItemWidget(props: TrayItemWidgetProps) {
+
+	const modelOptions = props.model.getOptions()
+
+	const [editMode, setEditMode] = useState(false)
+	const [name, setName] = useState(modelOptions.name)
+	
+	const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+		const val = e.currentTarget.value
+
+		modelOptions.name = val
+		setName(val)
+	}
+	const handleKeyDown = (e:KeyboardEvent) => {
+		if (e.key === 'Enter') {
+			setEditMode(false)
+		}
+	}
+
+	let child: React.JSX.Element
+	if (editMode) {
+		child = <input autoFocus className='w-100' value={name} onChange={handleChange} onKeyDown={handleKeyDown} onBlur={() => setEditMode(false)}></input>
+	} else {
+		child = <span>{name}</span>
+	}
+
 	return (
 		<S.Tray
-			color={props.color}
+			color={modelOptions.color}
 			draggable={true}
 			onDragStart={(event) => {
-				event.dataTransfer.setData('storm-diagram-node', JSON.stringify(props.model.id));
+				event.dataTransfer.setData('storm-diagram-node', JSON.stringify(modelOptions.id));
 			}}
+			onDoubleClick={(e) => { setEditMode(true); console.log("lel") }}
 			className="tray-item"
 		>
-			{props.name}
+			{child}
 		</S.Tray>
 	);
 }

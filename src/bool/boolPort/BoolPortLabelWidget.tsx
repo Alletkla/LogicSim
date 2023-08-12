@@ -1,7 +1,7 @@
 import { DiagramEngine, PortWidget } from '@projectstorm/react-diagrams-core';
 import styled from '@emotion/styled';
 import { BoolPortModel } from './BoolPortModel';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useState } from 'react';
 
 interface BoolPortLabelWidgetProps extends PropsWithChildren {
 	port: BoolPortModel,
@@ -21,13 +21,17 @@ namespace S {
 		flex-grow: 1;
 	`;
 
+	//rightshift, down, blur, spread
 	export const Port = styled.div`
 		width: 15px;
 		height: 15px;
-		background: rgba(255, 255, 255, 0.1);
+		background: rgba(255, 255, 255, 0.5);
 
 		&:hover {
 			background: rgb(192, 255, 0);
+		}
+		&.active {
+			box-shadow: 10px 0px 10px -1px #00FF00FF;
 		}
 	`;
 }
@@ -38,6 +42,8 @@ export default function BoolPortLabelWidget({
 	manual = false
 }: BoolPortLabelWidgetProps) {
 
+	const [active, setActive] = useState(port.active)
+
 	function handleChange(
 		event: React.ChangeEvent<HTMLInputElement>,
 		port: BoolPortModel | null
@@ -46,11 +52,12 @@ export default function BoolPortLabelWidget({
 			return;
 		}
 		port.setActive(event.currentTarget.checked)
+		setActive(event.currentTarget.checked)
 	}
 
 	const portWidget = (
 		<PortWidget engine={engine} port={port}>
-			<S.Port />
+			<S.Port className={active ? "active" : ""}/>
 		</PortWidget>
 	);
 	const label = <S.Label>{port.getOptions().label}</S.Label>;

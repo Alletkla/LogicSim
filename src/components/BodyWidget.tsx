@@ -62,7 +62,7 @@ export default function BodyWidget(props: PropsWithChildren) {
 	const specialTrayItems = app.getBluePrintNodeModels().reduce((result, model) => {
 		const type = model.getType()
 		if (type === 'boolSource' || type === 'boolTarget') {
-			result.push(<TrayItemWidget key={model.getID()} model={{ 'id': model.getID() }} name={model.getOptions().name} color={model.getOptions().color}></TrayItemWidget>)
+			result.push(<TrayItemWidget key={model.getID()} model={model}></TrayItemWidget>)
 		}
 		return result
 	}, [])
@@ -72,7 +72,7 @@ export default function BodyWidget(props: PropsWithChildren) {
 		if (type === 'boolSource' || type === 'boolTarget') {
 			return result
 		}
-		result.push(<TrayItemWidget key={model.getID()} model={{ 'id': model.getID() }} name={model.getOptions().name} color={model.getOptions().color}></TrayItemWidget>)
+		result.push(<TrayItemWidget key={model.getID()} model={model}></TrayItemWidget>)
 		return result
 	}, [])
 
