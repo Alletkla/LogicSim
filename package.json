@@ -13,10 +13,14 @@
   "dependencies": {
     "@projectstorm/react-diagrams": "^7.0.2",
     "bootstrap": "^5.3.1",
+    "i18next": "^23.4.4",
+    "i18next-browser-languagedetector": "^7.1.0",
+    "i18next-http-backend": "^2.2.1",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-dropzone": "^14.2.3"
+    "react-dropzone": "^14.2.3",
+    "react-i18next": "^13.1.2"
   },
   "devDependencies": {
     "@jest/globals": "^29.6.2",

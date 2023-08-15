@@ -1,0 +1,31 @@
+.language-switcher-container {
+    position: relative;
+    width: 70px;
+    height: 40px;
+    overflow: hidden;
+  }
+  
+  .language-switcher-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .language-switcher-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .language-switcher-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+  }

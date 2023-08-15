@@ -5,6 +5,7 @@ import { useToast } from "./Toast/ToastContext";
 import { useApplication } from "../ApplicationContext";
 import HoverActivatedButton from "./Buttons/HoverActivatedButton";
 import SaveDialog from "./Modals/SaveDialog";
+import { useTranslation } from "react-i18next";
 
 export default function Header(props: PropsWithChildren) {
 
@@ -12,6 +13,7 @@ export default function Header(props: PropsWithChildren) {
     const { addToast } = useToast();
     const [file, setFile] = useState<File>()
     const [isWrapper, setIsWrapper] = useState(false)
+    const { t } = useTranslation()
 
     function handleElementLoad(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
         const fileReader = new FileReader()
@@ -93,22 +95,20 @@ export default function Header(props: PropsWithChildren) {
                             Load wrapped
                         </label>
                     </div> */}
-                    <button className="btn btn-primary" onClick={handleElementLoad}>Edit Element</button>
+                    <button className="btn btn-primary" onClick={handleElementLoad}>{t('header.btn_editEl')}</button>
                 </div>
                 <div className="ms-auto d-flex">
                     {/* <button className='btn btn-secondary ms-auto me-2' onClick={handleSerialize}>Save Element</button> */}
                     <SaveDialog id={"save"} title={"Save"} description={"Speichert die momentan bearbeitete Schaltung."} onButtonClick={handleSave}>
-                        <button type="button" className={`btn btn-primary me-2`} data-bs-toggle="modal" data-bs-target={`#save`}>Save</button>
+                        <button type="button" className={`btn btn-primary me-2`} data-bs-toggle="modal" data-bs-target={`#save`}>{t('header.save')}</button>
                     </SaveDialog>
                     <SaveDialog id={"save_and_reuse"} title={"Save and Reuse"} description={"Speichert die momentan bearbeitete Schaltung und Stellt sie als Baustein links in der Seitenleise zur Verfügung."} onButtonClick={handleSaveAndReuse}>
-                        <button type="button" className={`btn btn-secondary me-2`} data-bs-toggle="modal" data-bs-target={`#save_and_reuse`}>Save and Reuse</button>
+                        <button type="button" className={`btn btn-secondary me-2`} data-bs-toggle="modal" data-bs-target={`#save_and_reuse`}>{t('header.save_and_reuse')}</button>
                     </SaveDialog>
                     <span className="vr border-2 me-2" />
-                    <HoverActivatedButton onClick={app.resetModel} className="btn btn-secondary me-2">Clear</HoverActivatedButton>
-                    <HoverActivatedButton onClick={cloneSelected} className="btn btn-secondary me-2">Clone Selected</HoverActivatedButton>
+                    <HoverActivatedButton onClick={app.resetModel} className="btn btn-secondary me-2">{t('header.clear')}</HoverActivatedButton>
+                    <HoverActivatedButton onClick={cloneSelected} className="btn btn-secondary me-2">{t('header.clone_selected')}</HoverActivatedButton>
                 </div>
-            </div>
-            <div id="toast_container" className="toast-container position-fixed top-0 end-0 p-3">
             </div>
         </>
     )

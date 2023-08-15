@@ -52,7 +52,7 @@ export default function TrayItemWidget(props: TrayItemWidgetProps) {
 			onDragStart={(event) => {
 				event.dataTransfer.setData('storm-diagram-node', JSON.stringify(modelOptions.id));
 			}}
-			onDoubleClick={(e) => { setEditMode(true); console.log("lel") }}
+			onDoubleClick={(e) => { setEditMode(true)}}
 			className="tray-item"
 		>
 			{child}

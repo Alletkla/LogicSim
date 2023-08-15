@@ -3,6 +3,7 @@ import * as RD from '@projectstorm/react-diagrams';
 import { BoolNodeModel } from "./bool/boolNode/BoolNodeModel";
 import { BoolSourceNodeModel } from "./bool/boolSourceNode/BoolSourceNodeModel";
 import { BoolTargetNodeModel } from "./bool/boolTargetNode/BoolTargetNodeModel";
+import { useTranslation } from "react-i18next";
 
 interface ApplicationContextProps {
     resetModel: () => void
@@ -18,9 +19,10 @@ interface ApplicationContextProps {
 const ApplicationContext = createContext<ApplicationContextProps>(null)
 
 export default function ApplicationProvider({ children, engine, model }: PropsWithChildren & { engine: RD.DiagramEngine, model: RD.DiagramModel }) {
+    const { t } = useTranslation() 
     const [bluePrintNodeModels, setBluePrintModels] = useState<BoolNodeModel[]>([
-        new BoolSourceNodeModel({ name: 'Eingang', color: 'rgb(0,192,255)' }),
-        new BoolTargetNodeModel({ name: 'Ausgang', color: 'rgb(0,255,192)' })
+        new BoolSourceNodeModel({ name: t('nodes.source'), color: 'rgb(0,192,255)' }),
+        new BoolTargetNodeModel({ name: t('nodes.target'), color: 'rgb(0,255,192)' })
     ])
     const [activeModel, setActiveModel] = useState<RD.DiagramModel>(engine.getModel())
     const [diagramEngine, setDiagramEngine] = useState(engine)

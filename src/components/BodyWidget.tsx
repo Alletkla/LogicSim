@@ -11,6 +11,8 @@ import not from '../bool/defaultBoolNodes/not';
 import or from '../bool/defaultBoolNodes/or';
 import ModalDialog from './Modals/ModalDialog';
 import { useToast } from './Toast/ToastContext';
+import { useTranslation } from 'react-i18next';
+import TwoStateSwitcher from './Locale/TwoStateSwitcher';
 
 namespace S {
 	export const Body = styled.div`
@@ -40,13 +42,14 @@ export default function BodyWidget(props: PropsWithChildren) {
 	const app = useApplication()
 	const toast = useToast()
 	const engine = app.getDiagramEngine()
+	const { t } = useTranslation()
 
 	useEffect(() => {
 		app.addBluePrintNodeModel(and().node)
 		app.addBluePrintNodeModel(not().node)
 		app.addBluePrintNodeModel(or().node)
 
-		toast.addToast("This App does not support Touch Devices yet.", "warning")
+		toast.addToast(t('toasts.touch_warning'), "warning", 5000)
 	}, [])
 
 	function handleDrop(event: React.DragEvent<HTMLDivElement>) {
@@ -78,9 +81,21 @@ export default function BodyWidget(props: PropsWithChildren) {
 
 	return (
 		<S.Body>
-			<div className='position-absolute bottom-0 start-0 m-3'>
-				<ModalDialog id={"help"} title={"Help"}>
-					You can select multiple nodes and especially links by pressing [SHIFT] while holding down the left mouse button.
+			<div className='position-absolute bottom-0 start-0 m-3 d-flex align-items-end'>
+			<TwoStateSwitcher className='me-3' backgrounds={{ "de": "locales/de/flag.png", "en": "locales/en/flag.png" }} states={["de", "en"]} ></TwoStateSwitcher>
+				<ModalDialog id={"help"} title={"Help"} size='lg'>
+					<h2>{t('help.h_create')}</h2>
+					<ol className='fs-5'>
+						{(t('help.p_create_listItems', { returnObjects: true }) as string[]).map((val, key) => (
+							<li key={key}>{val}</li>
+						))}
+					</ol>
+					<h2>{t('help.h_select')}</h2>
+					<p className='fs-5'>{t('help.p_select')}</p>
+					<h2>{t('help.h_delete')}</h2>
+					<p className='fs-5'>{t('help.p_delete')}</p>
+					<h2>{t('help.h_renaming')}</h2>
+					<p className='fs-5'>{t('help.p_renaming')}</p>
 				</ModalDialog>
 				<button type="button" className={`fs-1 btn btn-primary me-2 rounded-circle`} data-bs-toggle="modal" data-bs-target={`#help`}>?</button>
 			</div>

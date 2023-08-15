@@ -4,6 +4,7 @@ import { PropsWithChildren } from 'react';
 import Dropzone from 'react-dropzone';
 import { useApplication } from '../ApplicationContext';
 import { WrapperNodeModel } from '../wrapperNode/WrapperNodeModel';
+import { useTranslation } from 'react-i18next';
 
 namespace S {
 	export const Tray = styled.div`
@@ -22,6 +23,7 @@ namespace S {
 export default function TrayWidget(props: PropsWithChildren & { readOnly?: boolean }) {
 	const { readOnly = false } = props
 	const app = useApplication()
+	const { t } = useTranslation()
 
 	function handleLoad(acceptedFiles: File[]) {
 		acceptedFiles.map(file => {
@@ -45,9 +47,9 @@ export default function TrayWidget(props: PropsWithChildren & { readOnly?: boole
 					<S.DropZone className='btn btn-outline-success mx-2 mt-2 border border-3 border-success rounded-2'>
 						<div {...getRootProps({ className: 'd-flex flex-column justify-content-center' })}>
 							<input {...getInputProps()} />
-							<span>Drag 'n' drop here</span>
+							<span>{t('tray.drag_n_drop')}</span>
 							<span className='btn btn-success rounded-circle mx-auto'>+</span>
-							<span>or click to select files</span>
+							<span>{t('tray.or_click')}</span>
 						</div>
 					</S.DropZone>
 				)}

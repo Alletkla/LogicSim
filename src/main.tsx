@@ -1,7 +1,7 @@
 import './index.scss'
+import './i18n.js'
+
 import ReactDOM from 'react-dom/client'
-import BodyWidget from './components/BodyWidget'
-import Header from './components/Header'
 import { ToastProvider } from './components/Toast/ToastContext'
 import ApplicationProvider from './ApplicationContext'
 import createEngine from '@projectstorm/react-diagrams'
@@ -12,6 +12,8 @@ import { BoolPortModelFactory } from './bool/boolPort/BoolPortModelFactory'
 import { BoolSourceNodeFactory } from './bool/boolSourceNode/BoolSourceNodeFactory'
 import { BoolTargetNodeFactory } from './bool/boolTargetNode/BoolTargetNodeFactory'
 import { WrapperNodeFactory } from './wrapperNode/WrapperNodeFactory'
+import App from './App'
+import { LocaleProvider } from './components/Locale/LocaleContext'
 
 const diagramEngine = createEngine()
 diagramEngine.getNodeFactories().registerFactory(new BoolNodeFactory())
@@ -29,12 +31,12 @@ diagramEngine.getPortFactories().registerFactory(new BoolPortModelFactory())
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
-  // <App />
-  <ApplicationProvider engine={diagramEngine} model={new SRD.DiagramModel()}>
-    <ToastProvider>
-      <Header></Header>
-      <BodyWidget />
-    </ToastProvider>
-  </ApplicationProvider>
+  <LocaleProvider>
+    <ApplicationProvider engine={diagramEngine} model={new SRD.DiagramModel()}>
+      <ToastProvider>
+        <App />
+      </ToastProvider>
+    </ApplicationProvider>
+  </LocaleProvider>
   // </React.StrictMode>,
 )

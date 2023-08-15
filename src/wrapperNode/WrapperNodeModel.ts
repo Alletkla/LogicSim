@@ -136,7 +136,6 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
 
         let model = new DiagramModel()
         let engine = createEngine()
-        console.log(engine.getFactoryForLayer('diagram-links'))
         engine.getNodeFactories().registerFactory(new BoolNodeFactory())
         engine.getNodeFactories().registerFactory(new BoolSourceNodeFactory())
         engine.getNodeFactories().registerFactory(new BoolTargetNodeFactory())

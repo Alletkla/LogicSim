@@ -1,0 +1,35 @@
+{
+    "header": {
+        "btn_editEl": "Edit Element",
+        "save": "Save",
+        "save_and_reuse": "Save and Reuse",
+        "clear": "Clear",
+        "clone_selected": "Clone Selected"
+    },
+    "nodes": {
+        "source": "Input",
+        "target": "Output"
+    },
+    "tray": {
+        "drag_n_drop": "Drag 'n' drop here",
+        "or_click": "or click to select files"
+    },
+    "help": {
+        "h_create": "✏️ Creating Circuits",
+        "p_create_listItems": [
+            "Drag and Drop Elements from the left sidebar on the canvas.",
+            "Connect nodes with links via clicking and holding left mouse button on a port",
+            "Input Nodes have checkboxes on them, which can be used to set the port active.",
+            "Save & Reuse. For wrapping your circuit into an new element. Input and Outputs get automatically detected. Therefore you should at least have 1 'Input-Node' and 1 'Output-Node' in your circuit."
+        ],
+        "h_select": "🫵🏼 Selecting",
+        "p_select": "You can select multiple nodes and especially links by pressing [SHIFT] while holding down the left mouse button.",
+        "h_delete": "❌ Deleting",
+        "p_delete": "Select elements and press [DEL] on your keyboard.",
+        "h_renaming": "🔁 Renaming",
+        "p_renaming": "Renaming is only possible before dragging elements onto the canvas by double-clicking on the name of the element in the sidebar."
+    },
+    "toasts": {
+        "touch_warning": "This App does not support Touch Devices yet. Please switch to a device with mouse and keyboard or connect one."
+    }
+}

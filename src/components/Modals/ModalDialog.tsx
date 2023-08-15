@@ -3,13 +3,14 @@ import { MouseEvent, PropsWithChildren } from "react";
 export default function ModalDialog(props: PropsWithChildren & {
     id: string
     title: string
+    size?: 'sm' | 'lg' | 'xl'
     onButtonClick?: (e: MouseEvent<HTMLButtonElement>) => void
 }) {
 
-    const { children, id, title, onButtonClick } = props
+    const { children, id, title, size, onButtonClick } = props
 
     return (<>
-        <div className="modal fade" id={id} tabIndex={1}>
+        <div className={`modal fade ${size ? "modal-" + size : ""}`} id={id} tabIndex={1}>
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">

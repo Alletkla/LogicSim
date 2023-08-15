@@ -1,0 +1,35 @@
+{
+    "header": {
+        "btn_editEl": "Element bearbeiten",
+        "save": "Speichern",
+        "save_and_reuse": "Speichern und Benutzen",
+        "clear": "Alles löschen",
+        "clone_selected": "Selektiertes duplizieren"
+    },
+    "nodes": {
+        "source": "Eingang",
+        "target": "Ausgang"
+    },
+    "tray": {
+        "drag_n_drop": "Drag & Drop hier",
+        "or_click": "oder klicken, um Dateien auszuwählen"
+    },
+    "help": {
+        "h_create": "✏️ Schaltungen erstellen",
+        "p_create_listItems": [
+            "Ziehe Elemente per Drag & Drop aus der linken Seitenleiste auf die Zeichenfläche.",
+            "Verbinde Elemente mit Verbindungs-Drähten, indem du die linke Maustaste auf einem Anschluss drückst und hältst bis du wieder über einem Anschluss bist. Die Verbindung sollte sich dabei \"leicht kurvig\" gestalten.",
+            "Eingang-Elemente haben Kontrollkästchen neben ihren Anschlüssen, um Anschlüsse an bzw. ausschalten zu können.",
+            "Soeichern und Benutzen, um die Zeichenfläche in ein neues Element umzuwandeln und links in der Seitenleiste anzuzeigen. Eingang und Ausgang werden automatisch detektiert und in Anschlüsse umgewandelt. Daher solltest du mindestens 1 'Eingang-Element' and 1 'Ausgang-Element' in deiner Schaltung haben."
+        ],
+        "h_select": "🫵🏼 Auswählen",
+        "p_select": "Du kannst mehrere Elemente (und insbesondere Verbindungs-Drähte) selektieren, indem du die [UMSCHALT] Taste gedrückt hältst, während du bei gedrückter linker Maustaste einen Bereich markierst.",
+        "h_delete": "❌ Löschen",
+        "p_delete": "Selektiere Elemente und drücke [ENTF] auf deiner Tastatur.",
+        "h_renaming": "🔁 Umbenennen",
+        "p_renaming": "Umbennen ist nur vor dem Einfügen in die Zeichenfläche über einen Doppelklick auf das Element in der Seitenleiste möglich."
+    },
+    "toasts": {
+        "touch_warning": "Diese App unterstützt (noch) keine Touch-Geräte. Bitte wechsle auf ein Gerät mit Maus und Tastatur oder schließe welche an."
+    }
+}
