@@ -23,9 +23,9 @@
             "Save & Reuse. For wrapping your circuit into an new element. Input and Outputs get automatically detected. Therefore you should at least have 1 'Input-Node' and 1 'Output-Node' in your circuit."
         ],
         "h_select": "🫵🏼 Selecting",
-        "p_select": "You can select multiple nodes and especially links by pressing [SHIFT] while holding down the left mouse button.",
+        "p_select": "You can select links by holding [SHIFT] while clicking on them. You can select multiple nodes and especially links by pressing [SHIFT] while holding down the left mouse button.",
         "h_delete": "❌ Deleting",
-        "p_delete": "Select elements and press [DEL] on your keyboard.",
+        "p_delete": "Select elements and press [DEL] or [BACKSPACE] (arrow above [ENTER]) on your keyboard.",
         "h_renaming": "🔁 Renaming",
         "p_renaming": "Renaming is only possible before dragging elements onto the canvas by double-clicking on the name of the element in the sidebar."
     },

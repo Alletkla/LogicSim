@@ -23,9 +23,9 @@
             "Soeichern und Benutzen, um die Zeichenfläche in ein neues Element umzuwandeln und links in der Seitenleiste anzuzeigen. Eingang und Ausgang werden automatisch detektiert und in Anschlüsse umgewandelt. Daher solltest du mindestens 1 'Eingang-Element' and 1 'Ausgang-Element' in deiner Schaltung haben."
         ],
         "h_select": "🫵🏼 Auswählen",
-        "p_select": "Du kannst mehrere Elemente (und insbesondere Verbindungs-Drähte) selektieren, indem du die [UMSCHALT] Taste gedrückt hältst, während du bei gedrückter linker Maustaste einen Bereich markierst.",
+        "p_select": "Verbindungen kannst du bei gedrückter [UMSCHALT] Taste selektieren. Mehrere Elemente (und insbesondere Verbindungs-Drähte)kannst du selektieren, indem du die [UMSCHALT] Taste gedrückt hältst, während du bei gedrückter linker Maustaste einen Bereich markierst.",
         "h_delete": "❌ Löschen",
-        "p_delete": "Selektiere Elemente und drücke [ENTF] auf deiner Tastatur.",
+        "p_delete": "Selektiere Elemente und drücke [ENTF] oder [RÜCKSCHRITT] (Pfeil über der Entertaste) auf deiner Tastatur.",
         "h_renaming": "🔁 Umbenennen",
         "p_renaming": "Umbennen ist nur vor dem Einfügen in die Zeichenfläche über einen Doppelklick auf das Element in der Seitenleiste möglich."
     },
