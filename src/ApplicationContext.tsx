@@ -14,20 +14,30 @@ interface ApplicationContextProps {
     removeBluePrintModel: (id: string) => void,
     getBluePrintModel: (id: string) => BoolNodeModel,
     getBluePrintNodeModels: () => BoolNodeModel[]
+    deselectAll: () => void
 }
 
 const ApplicationContext = createContext<ApplicationContextProps>(null)
 
 export default function ApplicationProvider({ children, engine, model }: PropsWithChildren & { engine: RD.DiagramEngine, model: RD.DiagramModel }) {
     const { t } = useTranslation() 
+
+    //this 2 Classes are reinitiated on every State chnage of the Provider
     const [bluePrintNodeModels, setBluePrintModels] = useState<BoolNodeModel[]>([
         new BoolSourceNodeModel({ name: t('nodes.source'), color: 'rgb(0,192,255)' }),
         new BoolTargetNodeModel({ name: t('nodes.target'), color: 'rgb(0,255,192)' })
     ])
+
     const [activeModel, setActiveModel] = useState<RD.DiagramModel>(engine.getModel())
     const [diagramEngine, setDiagramEngine] = useState(engine)
     //not good practice but is necessary since library only updates object and therefore no statechange happens
     const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+    function deselectAll(){
+        activeModel.clearSelection()
+        Object.values(activeModel.getActiveLinkLayer().getLinks()).map(link => link.setSelected(false))
+        forceUpdate()
+    }
 
     useEffect(() => {
         setActiveModelAndListen(model)
@@ -79,6 +89,7 @@ export default function ApplicationProvider({ children, engine, model }: PropsWi
             throw new Error('NodeModel must not be null')
         }
         if (bluePrintNodeModels.find(model => model.getOptions().name == nodeModel.getOptions().name)) {
+            console.warn("This model name already exists")
             return
         }
         setBluePrintModels(prev => [...prev, nodeModel])
@@ -97,6 +108,7 @@ export default function ApplicationProvider({ children, engine, model }: PropsWi
         removeBluePrintModel,
         getBluePrintModel,
         getBluePrintNodeModels,
+        deselectAll
     }
 
     return (

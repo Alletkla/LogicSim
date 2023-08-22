@@ -51,7 +51,7 @@ export default function Header(props: PropsWithChildren) {
 
     function handleSaveAndReuse(e: MouseEvent<HTMLButtonElement>, fileName: string) {
         handleSave(e, fileName)
-        const wrapperNode = new WrapperNodeModel(fileName, 'rgb(0,100,100)', app.getActiveDiagram())
+        const wrapperNode = new WrapperNodeModel(fileName, 'rgb(0,100,100)', app.getActiveDiagram().clone())
         app.addBluePrintNodeModel(wrapperNode)
         app.resetModel()
     }
@@ -100,10 +100,10 @@ export default function Header(props: PropsWithChildren) {
                 <div className="ms-auto d-flex">
                     {/* <button className='btn btn-secondary ms-auto me-2' onClick={handleSerialize}>Save Element</button> */}
                     <SaveDialog id={"save"} title={"Save"} description={"Speichert die momentan bearbeitete Schaltung."} onButtonClick={handleSave}>
-                        <button type="button" className={`btn btn-primary me-2`} data-bs-toggle="modal" data-bs-target={`#save`}>{t('header.save')}</button>
+                        <button onClick={() =>  app.deselectAll()} type="button" className={`btn btn-primary me-2`} data-bs-toggle="modal" data-bs-target={`#save`}>{t('header.save')}</button>
                     </SaveDialog>
                     <SaveDialog id={"save_and_reuse"} title={"Save and Reuse"} description={"Speichert die momentan bearbeitete Schaltung und Stellt sie als Baustein links in der Seitenleise zur Verfügung."} onButtonClick={handleSaveAndReuse}>
-                        <button type="button" className={`btn btn-secondary me-2`} data-bs-toggle="modal" data-bs-target={`#save_and_reuse`}>{t('header.save_and_reuse')}</button>
+                        <button onClick={() =>  app.deselectAll()} type="button" className={`btn btn-secondary me-2`} data-bs-toggle="modal" data-bs-target={`#save_and_reuse`}>{t('header.save_and_reuse')}</button>
                     </SaveDialog>
                     <span className="vr border-2 me-2" />
                     <HoverActivatedButton onClick={app.resetModel} className="btn btn-secondary me-2">{t('header.clear')}</HoverActivatedButton>
