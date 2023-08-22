@@ -52,15 +52,10 @@ export class BoolLinkWidget extends React.Component<BoolLinkProps, BoolLinkState
 				this.setState(prev => ({ ...prev, active: event.isActive }))
 			}
 		}
-
-		//Only listen to SourcePortChanges since they change the active state of the link
-		const sourcePort = this.props.link.getSourcePort()
-		if (sourcePort) {
-			sourcePort.registerListener(listener)
-		} else {
-			this.props.link.registerListener({
-				'sourcePortChanged': (event) => event.port.registerListener(listener)
-			})
+		
+		const link = this.props.link
+		if (link) {
+			link.registerListener(listener)
 		}
 
 	}

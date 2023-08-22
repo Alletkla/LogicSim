@@ -1,8 +1,9 @@
-import { BaseEvent, BaseListener, DefaultPortModel, DefaultPortModelOptions, DeserializeEvent, ListenerHandle, PortModelAlignment } from "@projectstorm/react-diagrams";
+import { BaseEntityEvent, BaseEvent, BaseListener, DefaultPortModel, DefaultPortModelOptions, DeserializeEvent, ListenerHandle, NodeModel, NodeModelGenerics, PortModelAlignment } from "@projectstorm/react-diagrams";
 import { BoolLinkModel } from "../boolLink/BoolLinkModel";
+import { BoolNodeModel } from "../boolNode/BoolNodeModel";
 
 export interface BoolPortModelListener extends BaseListener {
-    activeChanged?(event: BaseEvent & {
+    activeChanged?(event: BaseEntityEvent & {
         isActive: boolean;
     }): void;
 }
@@ -13,7 +14,7 @@ export interface BoolPortModelSerialized extends ReturnType<DefaultPortModel['se
     active: boolean
 }
 export class BoolPortModel extends DefaultPortModel {
-    active: boolean
+    private active: boolean
 
     constructor(isIn: boolean, name?: string, label?: string); //fist overload
     constructor(options: DefaultPortModelOptions); //second overload
@@ -42,47 +43,19 @@ export class BoolPortModel extends DefaultPortModel {
         return new BoolLinkModel();
     }
 
-    override addLink(link: BoolLinkModel): void {
-        super.addLink(link)
-
-        if (this.getOptions().in) {
-            this.active = link.getOptions().active
-            const activeChangedListener = (event) => {
-                /**
-                 * @TODO deregister old Listener. Where to safe the handle?
-                 */
-                // link.deregisterListener(listener)
-                if (event.port !== this) {
-                    return
-                }
-                link.registerListener({
-                    'activeChanged': (event) => {
-                        event.isActive !== this.active && this.setActive(event.isActive)
-                    }
-                })
-            }
-            link.registerListener({
-                'targetPortChanged': activeChangedListener
-            })
-            link.registerListener({
-                'sourcePortChanged': activeChangedListener
-            })
-        } else {
-            link.getOptions().active = this.active
-        }
-
-    }
-
     override getLinks(): { [id: string]: BoolLinkModel; } {
         return super.getLinks() as { [id: string]: BoolLinkModel }
     }
 
     setActive(isActive: boolean) {
         this.active = isActive
+
+        if (this.getOptions().in === false) {
+            Object.entries(this.getLinks()).forEach(([_, linkModel]) => linkModel.setActive(isActive))
+        }
         this.fireEvent(
             { isActive: isActive }, 'activeChanged'
         )
-        Object.entries(this.getLinks()).forEach(([_, linkModel]) => linkModel.setActive(isActive))
     }
 
     isActive() {
@@ -103,5 +76,9 @@ export class BoolPortModel extends DefaultPortModel {
         return Object.assign(Object.assign({}, super.serialize()), {
             active: this.active
         });
+    }
+
+    override getParent(): BoolNodeModel {
+        return super.getParent() as BoolNodeModel
     }
 }

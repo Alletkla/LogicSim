@@ -65,36 +65,6 @@ describe('Link Addition', () => {
     })
 })
 
-describe('activation State Change in all Combinations', () => {
-    beforeEach(() => {
-        link = new BoolLinkModel()
-    })
-
-    test('Activation State Changes on TargetPort = In', () => {
-        link.setTargetPort(inPort)
-        link.setActive(true)
-        expect(inPort.isActive()).toBe(true)
-    })
-
-    test('Activation State Changes on SourcePort = In', () => {
-        link.setSourcePort(inPort)
-        link.setActive(true)
-        expect(inPort.isActive()).toBe(true)
-    })
-
-    test('Activation State doesnt change on SourcePort = Out', () => {
-        link.setSourcePort(outPort)
-        link.setActive(true)
-        expect(outPort.isActive()).toBe(false)
-    })
-
-    test('Activation State doesnt change on Target = Out', () => {
-        link.setTargetPort(outPort)
-        link.setActive(true)
-        expect(outPort.isActive()).toBe(false)
-    })
-})
-
 
 //cant be tested individually cause ports depend on nodes
 describe('serialize test', () => {

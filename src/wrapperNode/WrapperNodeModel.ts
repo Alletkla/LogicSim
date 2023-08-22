@@ -1,14 +1,9 @@
-import createEngine, { DeserializeEvent, DiagramModel } from "@projectstorm/react-diagrams";
+import { DeserializeEvent, DiagramModel } from "@projectstorm/react-diagrams";
 import { BoolNodeModel, BoolNodeModelGenerics, BoolNodeModelOptions, BoolNodeModelSerialized } from "../bool/boolNode/BoolNodeModel";
 import { BoolPortModel } from "../bool/boolPort/BoolPortModel";
 import { BoolSourceNodeModel } from "../bool/boolSourceNode/BoolSourceNodeModel";
 import * as _ from "lodash"
-import { BoolNodeFactory } from "../bool/boolNode/BoolNodeFactory";
-import { BoolLinkFactory } from "../bool/boolLink/BoolLinkFactory";
-import { BoolPortModelFactory } from "../bool/boolPort/BoolPortModelFactory";
-import { BoolSourceNodeFactory } from "../bool/boolSourceNode/BoolSourceNodeFactory";
-import { BoolTargetNodeFactory } from "../bool/boolTargetNode/BoolTargetNodeFactory";
-import { WrapperNodeFactory } from "./WrapperNodeFactory";
+import { generateDiagramEngine } from "../helpers/generalEnv";
 
 export interface WrapperNodeModelGenerics extends BoolNodeModelGenerics {
     OPTIONS: WrapperNodeModelOptions
@@ -34,19 +29,21 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
         }
         super(Object.assign({ type: 'wrapper', name: 'Untitled', color: 'rgb(0,192,255)', activationFun: null, wrappee: new DiagramModel() }, options));
 
-        this.constructFromWrappee(this.getOptions().wrappee)
+        this.constructFromWrappee(this.getOptions().wrappee, this)
     }
 
-    constructFromWrappee(wrappee: DiagramModel) {
+    constructFromWrappee(wrappee: DiagramModel, wrapper: WrapperNodeModel) {
         wrappee.getNodes().filter(
             node => node.getOptions().type === 'boolSource'
-        ).reduce((acc, curNode) => {
-            return acc.concat((<BoolSourceNodeModel>curNode).getInPorts())
-        }, <BoolPortModel[]>[]).map(
-            (port, index) => {
-                port.getOptions().name = `In${index}`
-                port.getOptions().label = `In${index}`
-                this.addInPort(port)
+        ).reduce((nodes, curNode) => {
+            return nodes.concat((<BoolSourceNodeModel>curNode).getInPorts())
+        }, <BoolPortModel[]>[]
+        ).map(
+            port => {
+                //needs to be in this way since listeners rely on parents and if the inner port is directly set as the outer parent gets overwritten
+                const wrapperPort = new BoolPortModel(port.getOptions().in, port.getParent().getOptions().name, port.getParent().getOptions().name)
+                wrapperPort.registerListener({"activeChanged": (event) => port.setActive(event.isActive)})
+                wrapper.addInPort(wrapperPort)
             }
         )
 
@@ -55,33 +52,24 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
         ).reduce((acc, curNode) => {
             return acc.concat((<BoolSourceNodeModel>curNode).getOutPorts())
         }, <BoolPortModel[]>[]).map(
-            (port, index) => {
-                port.getOptions().name = `Out${index}`
-                port.getOptions().label = `Out${index}`
-                this.addOutPort(port)
+            port => {
+                 //needs to be in this way since listeners rely on parents and if the inner port is directly set as the outer parent gets overwritten
+                const wrapperPort = new BoolPortModel(port.getOptions().in, port.getParent().getOptions().name, port.getParent().getOptions().name)
+                port.registerListener({"activeChanged": (event) => wrapperPort.setActive(event.isActive)})
+                wrapper.addOutPort(wrapperPort)
             }
         )
     }
 
-    /**
-     * Overwrite addPort behvaiour because outPorts active state is handled by the internal model
-     * @param port 
-     * @returns 
-     */
-    override addPort(port: BoolPortModel) {
-        super.addPort(port);
-        if (port.getOptions().in) {
-            if (this.portsIn.indexOf(port) === -1) {
-                this.portsIn.push(port);
-            }
-        }
-        else {
-            if (this.portsOut.indexOf(port) === -1) {
-                this.portsOut.push(port);
-            }
-        }
-        return port;
-    }
+    // /**
+    //  * Overwrite addPort behaviour because outPorts active state is handled by the internal model
+    //  * @param port 
+    //  * @returns 
+    //  */
+    // override addPort(port: BoolPortModel) {
+    //     super.addPort(port)
+    //     return port;
+    // }
 
     /**
      * WrapperNodeModel doens't create new Ports to keep reference to wrapped Port Nodes. 
@@ -135,15 +123,19 @@ export class WrapperNodeModel extends BoolNodeModel<WrapperNodeModelGenerics> {
         super.deserialize(event)
 
         let model = new DiagramModel()
-        let engine = createEngine()
-        engine.getNodeFactories().registerFactory(new BoolNodeFactory())
-        engine.getNodeFactories().registerFactory(new BoolSourceNodeFactory())
-        engine.getNodeFactories().registerFactory(new BoolTargetNodeFactory())
-        engine.getNodeFactories().registerFactory(new WrapperNodeFactory())
-        engine.getLinkFactories().registerFactory(new BoolLinkFactory())
-        engine.getPortFactories().registerFactory(new BoolPortModelFactory())
+        let engine = generateDiagramEngine()
 
         model.deserializeModel(event.data.wrappee, engine)
         this.options.wrappee = model
+    }
+
+    override doClone(lookupTable: {}, clone: WrapperNodeModel): void {
+        super.doClone(lookupTable, clone)
+        //clear ports since cloning the node copies them
+        clone.getOptions().wrappee = this.getOptions().wrappee.clone()
+        clone.ports = {}
+        clone.portsIn = []
+        clone.portsOut = []
+        this.constructFromWrappee(clone.getOptions().wrappee, clone);
     }
 }

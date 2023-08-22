@@ -32,12 +32,12 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
     /**
      * @TODO : make it an object, with the id of the added port as key....
      */
-    protected inPortListenerHandle: ListenerHandle;
+    protected inPortListenerHandles: { [key: string]: ListenerHandle };
 
     static activationFuns = {
-        [BoolNodeModelActivFuncs.AND]: (portsIn: BoolPortModel[]) => portsIn.every(el => el.active === true),
-        [BoolNodeModelActivFuncs.OR]: (portsIn: BoolPortModel[]) => !!portsIn.find((val) => val.active === true),
-        [BoolNodeModelActivFuncs.NOT]: (portsIn: BoolPortModel[]) => !portsIn[0].active
+        [BoolNodeModelActivFuncs.AND]: (portsIn: BoolPortModel[]) => portsIn.every(el => el.isActive() === true),
+        [BoolNodeModelActivFuncs.OR]: (portsIn: BoolPortModel[]) => !!portsIn.find((val) => val.isActive() === true),
+        [BoolNodeModelActivFuncs.NOT]: (portsIn: BoolPortModel[]) => !portsIn[0].isActive()
     }
     constructor(name: string, color: string, activationFun: (portsIn: BoolPortModel[]) => boolean);
     constructor(options?: G['OPTIONS']);
@@ -54,10 +54,14 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
             options));
         this.portsOut = [];
         this.portsIn = [];
+        this.inPortListenerHandles = {}
     }
 
     override doClone(lookupTable: {}, clone: any) {
         //ports need to be reseted in any case cause doClone calls addPort on super.getPorts(), where they are added again
+        /**
+         * @TODO investigate if this is really needed
+         */
         clone.portsIn = [];
         clone.portsOut = [];
         super.doClone(lookupTable, clone);
@@ -66,7 +70,7 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
     override removePort(port: BoolPortModel) {
         super.removePort(port);
         if (port.getOptions().in) {
-            port.deregisterListener(this.inPortListenerHandle)
+            port.deregisterListener(this.inPortListenerHandles[port.getID()])
             this.portsIn.splice(this.portsIn.indexOf(port), 1);
         }
         else {
@@ -86,10 +90,13 @@ export class BoolNodeModel<G extends BoolNodeModelGenerics = BoolNodeModelGeneri
         super.addPort(port);
         if (port.getOptions().in) {
             if (this.getActivationFun()) {
-                this.inPortListenerHandle = port.registerListener({
-                    'activeChanged': () => {
-                        this.getOutPorts().forEach(port => port.setActive(this.getActivationFun()(this.getInPorts())))
-                    }
+                Object.assign(this.inPortListenerHandles, {
+                    [port.getID()] : port.registerListener({
+                        'activeChanged': (obj) => {
+                            const node = obj.entity as BoolPortModel
+                            node.getParent().getOutPorts().forEach(port => port.setActive(this.getActivationFun()(node.getParent().getInPorts())))
+                        }
+                    })
                 })
             }
             if (this.portsIn.indexOf(port) === -1) {

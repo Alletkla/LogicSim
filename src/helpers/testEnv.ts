@@ -54,6 +54,23 @@ export function deserializeNode<T extends BoolNodeModel>(type: (new (...args: an
     return newModel
 }
 
+export function purgeIds(object: any) {
+    const purgedObj = { ...object }
+    for (let [key, val] of Object.entries(purgedObj)) {
+        if (typeof val === 'object') {
+            purgedObj[key] = purgeIds(val)
+        }
+        if (key === 'id') {
+            purgedObj[key] = 'purged';
+            continue
+        }
+        if (typeof val === 'string' && !!val.match(/[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{8}/i)) {
+            purgedObj[key] = 'purged'
+        }
+    }
+    return purgedObj
+}
+
 export const diagramEngine = createEngine()
 diagramEngine.getNodeFactories().registerFactory(new BoolNodeFactory())
 diagramEngine.getNodeFactories().registerFactory(new BoolSourceNodeFactory())

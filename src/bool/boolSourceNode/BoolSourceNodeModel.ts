@@ -22,7 +22,7 @@ export class BoolSourceNodeModel extends BoolNodeModel {
             type: 'boolSource',
             name: "Untitled",
             color: "rgb(0,192,255)",
-            activationFun: (portsIn: BoolPortModel[]) => portsIn[0]?.active || false,
+            activationFun: (portsIn: BoolPortModel[]) => portsIn[0]?.isActive() || false,
             ...options
         })
         this.addInPort('In')

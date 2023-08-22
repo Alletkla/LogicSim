@@ -1,4 +1,4 @@
-import { BaseEvent, DefaultLabelModel, DefaultLinkModelListener, DefaultLinkModelOptions, DeserializeEvent, LabelModel, LinkModel, LinkModelGenerics, ListenerHandle, PortModel, PortModelAlignment } from "@projectstorm/react-diagrams";
+import { BaseEvent, DefaultLabelModel, DefaultLinkModelListener, DefaultLinkModelOptions, DeserializeEvent, LabelModel, LinkModel, LinkModelGenerics, ListenerHandle, PortModel, PortModelAlignment, PortModelGenerics } from "@projectstorm/react-diagrams";
 import { BezierCurve } from '@projectstorm/geometry';
 import { BoolPortModel } from "../boolPort/BoolPortModel";
 
@@ -103,6 +103,18 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 
 	setActive(active: boolean) {
 		this.options.active = active
+
+		const sourcePort = this.getSourcePort()
+		if (sourcePort && sourcePort.getOptions().in) {
+			sourcePort.setActive(active)
+			return
+		}
+
+		const targetPort = this.getTargetPort()
+		if (targetPort && targetPort.getOptions().in) {
+			targetPort.setActive(active)
+		}
+
 		this.fireEvent({ isActive: active }, 'activeChanged')
 	}
 
@@ -116,6 +128,28 @@ export class BoolLinkModel extends LinkModel<BoolLinkModelGenerics> {
 
 	override registerListener(listener: BoolLinkModelListener): ListenerHandle {
 		return super.registerListener(listener)
+	}
+
+	override setSourcePort(port: BoolPortModel): void {
+		super.setSourcePort(port)
+
+		if (port.getOptions().in) {
+			port.setActive(this.isActive())
+		}else{
+			this.setActive(port.isActive())
+		}
+	}
+
+	override setTargetPort(port: BoolPortModel): void {
+		super.setTargetPort(port)
+
+		if (port.getOptions().in) {
+			port.setActive(this.isActive())
+		}
+	}
+
+	isActive() {
+		return this.getOptions().active
 	}
 }
 
