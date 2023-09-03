@@ -12,7 +12,8 @@ interface BoolPortLabelWidgetProps extends PropsWithChildren {
 namespace S {
 	export const PortLabel = styled.div`
 		display: flex;
-		margin-top: 1px;
+		margin-top: 2px;
+		margin-bottom: 2px;
 		align-items: center;
 	`;
 
@@ -23,8 +24,8 @@ namespace S {
 
 	//rightshift, down, blur, spread
 	export const Port = styled.div`
-		width: 15px;
-		height: 15px;
+		width: 20px;
+		height: 20px;
 		background: rgba(255, 255, 255, 0.5);
 
 		&:hover {

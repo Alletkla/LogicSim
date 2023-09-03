@@ -22,3 +22,5 @@ export const generateDiagramEngine = () => {
 
     return engine
 }
+
+export const DEFAULT_COLOR = 'rgb(168,61,6)'

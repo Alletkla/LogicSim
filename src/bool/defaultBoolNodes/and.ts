@@ -1,6 +1,7 @@
+import { DEFAULT_COLOR } from "../../helpers/generalEnv"
 import { BoolNodeModel, BoolNodeModelActivFuncs } from "../boolNode/BoolNodeModel"
 
-export default function and(label: string = 'AND', color: string = 'rgb(192,255,0)') {
+export default function and(label: string = 'AND', color: string = DEFAULT_COLOR) {
     var node = new BoolNodeModel(label, color, BoolNodeModel.activationFuns[BoolNodeModelActivFuncs.AND])
     node.setPosition(200, 150)
     const port1 = node.addInPort('In1')

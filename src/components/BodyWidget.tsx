@@ -6,9 +6,6 @@ import DemoCanvasWidget from '../helpers/DemoCanvasWidget';
 import styled from '@emotion/styled';
 import { PropsWithChildren, useEffect } from 'react';
 import { useApplication } from '../ApplicationContext';
-import and from '../bool/defaultBoolNodes/and';
-import not from '../bool/defaultBoolNodes/not';
-import or from '../bool/defaultBoolNodes/or';
 import ModalDialog from './Modals/ModalDialog';
 import { useToast } from './Toast/ToastContext';
 import { useTranslation } from 'react-i18next';
@@ -45,10 +42,6 @@ export default function BodyWidget(props: PropsWithChildren) {
 	const { t } = useTranslation()
 
 	useEffect(() => {
-		app.addBluePrintNodeModel(and().node)
-		app.addBluePrintNodeModel(not().node)
-		app.addBluePrintNodeModel(or().node)
-
 		toast.addToast(t('toasts.touch_warning'), "warning", 5000)
 	}, [])
 

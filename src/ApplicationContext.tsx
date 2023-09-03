@@ -4,6 +4,9 @@ import { BoolNodeModel } from "./bool/boolNode/BoolNodeModel";
 import { BoolSourceNodeModel } from "./bool/boolSourceNode/BoolSourceNodeModel";
 import { BoolTargetNodeModel } from "./bool/boolTargetNode/BoolTargetNodeModel";
 import { useTranslation } from "react-i18next";
+import and from "./bool/defaultBoolNodes/and";
+import not from "./bool/defaultBoolNodes/not";
+import or from "./bool/defaultBoolNodes/or";
 
 interface ApplicationContextProps {
     resetModel: () => void
@@ -24,8 +27,8 @@ export default function ApplicationProvider({ children, engine, model }: PropsWi
 
     //this 2 Classes are reinitiated on every State chnage of the Provider
     const [bluePrintNodeModels, setBluePrintModels] = useState<BoolNodeModel[]>([
-        new BoolSourceNodeModel({ name: t('nodes.source'), color: 'rgb(0,192,255)' }),
-        new BoolTargetNodeModel({ name: t('nodes.target'), color: 'rgb(0,255,192)' })
+        new BoolSourceNodeModel({ name: t('nodes.source'), color: 'rgb(108,157,5)' }),
+        new BoolTargetNodeModel({ name: t('nodes.target'), color: 'rgb(4,122,77)' })
     ])
 
     const [activeModel, setActiveModel] = useState<RD.DiagramModel>(engine.getModel())
@@ -41,6 +44,9 @@ export default function ApplicationProvider({ children, engine, model }: PropsWi
 
     useEffect(() => {
         setActiveModelAndListen(model)
+        addBluePrintNodeModel(and().node)
+		addBluePrintNodeModel(not().node)
+		addBluePrintNodeModel(or().node)
     }, [])
 
 

@@ -1,6 +1,7 @@
+import { DEFAULT_COLOR } from "../../helpers/generalEnv"
 import { BoolNodeModel, BoolNodeModelActivFuncs } from "../boolNode/BoolNodeModel"
 
-export default function or(label: string = 'OR', color: string = 'rgb(192,255,0)') {
+export default function or(label: string = 'OR', color: string = DEFAULT_COLOR) {
     var node = new BoolNodeModel(label, color, BoolNodeModel.activationFuns[BoolNodeModelActivFuncs.OR])
     node.setPosition(200, 350)
     const port1 = node.addInPort('In1')

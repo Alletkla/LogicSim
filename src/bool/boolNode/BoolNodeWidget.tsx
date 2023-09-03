@@ -54,10 +54,11 @@ export interface BoolNodeWidgetProps extends React.PropsWithChildren<any> {
 	renderIns?: boolean;
 	renderOuts?: boolean;
 	manualActivate?: boolean;
+	className?: string
 }
 
 export default function BoolNodeWidget(props: BoolNodeWidgetProps) {
-	const { node, engine, renderIns = true, renderOuts = true, manualActivate = false } = props
+	const { node, engine, renderIns = true, renderOuts = true, manualActivate = false, className } = props
 
 	function generatePort(port) {
 		return (<BoolPortLabelWidget engine={engine} port={port} key={port.getID()} manual={manualActivate} />);
@@ -68,6 +69,7 @@ export default function BoolNodeWidget(props: BoolNodeWidgetProps) {
 			data-default-node-name={node.getOptions().name}
 			selected={node.isSelected()}
 			background={node.getOptions().color}
+			className={className}
 		>
 			<S.Title>
 				<S.TitleName>{node.getOptions().name}</S.TitleName>

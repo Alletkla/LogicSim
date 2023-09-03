@@ -164,18 +164,11 @@ describe("correct state handling inside the node", () => {
 
         //inner convinience check
         expect(clonedSourceIn0.isActive()).toBe(true)
-
-        // console.log(clonedSource.getPorts().In)
-
         expect(clonedSourceOut0.isActive()).toBe(true)
         expect(clonedTargetIn0.isActive()).toBe(true)
 
         //this 2 Outputs should be the same
         expect(clonedWrapperOut0.isActive()).toBe(true)
         expect(clonedTargetOut0.isActive()).toBe(true)
-
-
-
-        // expect(clonedWrapperIn0.getID()).toBe(sourceIn0.getID())
     })
 })

@@ -11,7 +11,7 @@ const defaultValue = {
 export const LocaleContext = createContext(defaultValue)
 
 export function LocaleProvider({ children }: PropsWithChildren) {
-    const [locale, setLocale] = useState(i18n.language)
+    const [locale, setLocale] = useState(i18n.resolvedLanguage)
     const supportedLngs = suplngs
 
     useEffect(() => {

@@ -9,9 +9,6 @@ import { useTranslation } from 'react-i18next';
 namespace S {
 	export const Tray = styled.div`
 		min-width: 200px;
-		// background: rgb(20, 20, 20);
-		// flex-grow: 0;
-		// flex-shrink: 0;
 	`;
 
 	export const DropZone = styled.button`
@@ -32,9 +29,7 @@ export default function TrayWidget(props: PropsWithChildren & { readOnly?: boole
 			fileReader.onload = event => {
 				const newModel = new DiagramModel()
 				newModel.deserializeModel(JSON.parse(event.target.result.toString()), app.getDiagramEngine())
-				// const wrapperModel = new DiagramModel()
-				// wrapperModel.addNode(new WrapperNodeModel(file.name.split('.')[0], 'rgb(0,100,100', newModel))
-				app.addBluePrintNodeModel(new WrapperNodeModel(file.name.split('.')[0], 'rgb(0,100,100)', newModel))
+				app.addBluePrintNodeModel(new WrapperNodeModel(file.name.split('.')[0], 'rgb(134,4,80)', newModel))
 			}
 		})
 	}
