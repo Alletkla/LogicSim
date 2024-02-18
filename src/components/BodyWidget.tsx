@@ -76,7 +76,7 @@ export default function BodyWidget(props: PropsWithChildren) {
 		<S.Body>
 			<div className='position-absolute bottom-0 start-0 m-3 d-flex align-items-end'>
 			<TwoStateSwitcher className='me-3' backgrounds={{ "de": "locales/de/flag.png", "en": "locales/en/flag.png" }} states={["de", "en"]} ></TwoStateSwitcher>
-				<ModalDialog id={"help"} title={"Help"} size='lg'>
+				<ModalDialog id={"help"} title={t('help.title')} size='lg'>
 					<h2>{t('help.h_create')}</h2>
 					<ol className='fs-5'>
 						{(t('help.p_create_listItems', { returnObjects: true }) as string[]).map((val, key) => (

@@ -1,8 +1,20 @@
 {
+    "dialogs": {
+        "common": {
+            "close": "Schließen"
+        },
+        "save": {
+            "title": "Speichern",
+            "description": "Speichert die momentan bearbeitete Schaltung.",
+            "placeholder": "Dateiname"
+        },
+        "save_and_reuse": {
+            "title": "Speichern und Benutzen",
+            "description": "Speichert die momentan bearbeitete Schaltung und stellt sie als Baustein links in der Seitenleise zur Verfügung."
+        }
+    },
     "header": {
         "btn_editEl": "Element bearbeiten",
-        "save": "Speichern",
-        "save_and_reuse": "Speichern und Benutzen",
         "clear": "Alles löschen",
         "clone_selected": "Selektiertes duplizieren"
     },
@@ -15,6 +27,7 @@
         "or_click": "oder klicken, um Dateien auszuwählen"
     },
     "help": {
+        "title": "Hilfe",
         "h_create": "✏️ Schaltungen erstellen",
         "p_create_listItems": [
             "Ziehe Elemente per Drag & Drop aus der linken Seitenleiste auf die Zeichenfläche.",

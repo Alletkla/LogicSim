@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import { MouseEvent, PropsWithChildren } from "react";
 
 export default function ModalDialog(props: PropsWithChildren & {
@@ -21,7 +22,7 @@ export default function ModalDialog(props: PropsWithChildren & {
                         {children}
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">{t("dialogs.common.close")}</button>
                         {onButtonClick && <button type="button" onClick={onButtonClick} className="btn btn-primary" data-bs-dismiss="modal">{title}</button>}
                     </div>
                 </div>

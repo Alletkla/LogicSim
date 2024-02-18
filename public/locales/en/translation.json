@@ -1,8 +1,20 @@
 {
+    "dialogs": {
+        "common": {
+            "close": "Close"
+        },
+        "save": {
+            "title": "Save",
+            "description": "Saves the currently edited curcuit.",
+            "placeholder": "Filename"
+        },
+        "save_and_reuse": {
+            "title": "Save and Reuse",
+            "description": "Saves the currently edited circuit and adds it in the left side tray."
+        }
+    },
     "header": {
         "btn_editEl": "Edit Element",
-        "save": "Save",
-        "save_and_reuse": "Save and Reuse",
         "clear": "Clear",
         "clone_selected": "Clone Selected"
     },
@@ -15,6 +27,7 @@
         "or_click": "or click to select files"
     },
     "help": {
+        "title": "Help",
         "h_create": "✏️ Creating Circuits",
         "p_create_listItems": [
             "Drag and Drop Elements from the left sidebar on the canvas.",
