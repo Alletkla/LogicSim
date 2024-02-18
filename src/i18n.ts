@@ -5,7 +5,7 @@ import Backend from 'i18next-http-backend';
 
 export const supportedLngs = ['en', 'de']
 
-console.log(import.meta.env.BASE_URL)
+console.log("Base URL: ", import.meta.env.VITE_BASE_URL)
 //setting up i18n
 i18n
   .use(Backend)           //for loading translation files
@@ -15,7 +15,7 @@ i18n
     debug: false,
     fallbackLng: 'en',
     backend: {
-      loadPath: import.meta.env.BASE_URL + "/locales/{{lng}}/{{ns}}.json",
+      loadPath: import.meta.env.VITE_BASE_URL + "/locales/{{lng}}/{{ns}}.json",
     },
     load: 'languageOnly',
     supportedLngs: supportedLngs, // Add the supported languages here

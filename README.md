@@ -1,6 +1,14 @@
 # LogicSim
 A concise browser based logic simulation
 
+# envs
+Change to whatever base URL your app is running on
+.env:
+```
+VITE_BASE_URL=http://localhost:5173/
+```
+
+
 # Local execution
 For local execution build the app with this plugin in vite.config.ts
 
